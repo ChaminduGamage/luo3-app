@@ -13,4 +13,4 @@ I'll share another update with the final product once I complete the full UI des
 Check Out the Wireframes
 Figma Link: https://lnkd.in/gzGpP2SP
 
-![App Logo](luo3-app/Branding Concepts of Luo3.jpg)
+![App Logo](https://github.com/ChaminduGamage/luo3-app/blob/main/Branding%20Concepts%20of%20Luo3.jpg?raw=true)
