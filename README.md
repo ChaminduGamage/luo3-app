@@ -1,16 +1,15 @@
 # luo3_app
 
-A new Flutter project.
+It gives me great pleasure to introduce a first look at my most recent product, the Luo3 app, a peer-to-peer car rental and driver hiring app!
 
-## Getting Started
+Branding & Style Guide:
+From selecting the perfect colour palette (#104879, anyone?) to designing a logo and defining typography, I have been focused on ensuring Luo3 has trust, innovation, and simplicity.
 
-This project is a starting point for a Flutter application.
+Wireframes & Early Concepts:
+Before looking into UI design and programming, I drew out the user experience with hand-drawn wireframes. 
 
-A few resources to get you started if this is your first Flutter project:
+Once I complete the full UI design and app development, I’ll share another update with the final product! Stay tuned for more progress as Luo3 evolves into a fully functional smart rental app.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Check Out the Wireframes
+Figma Link: https://lnkd.in/gzGpP2SP
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
