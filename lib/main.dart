@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:luo3_app/Pages/home_page.dart';
 
 void main() {
-  runApp(Luo3App());
+  runApp(const Luo3App());
 }
 
 class Luo3App extends StatelessWidget {
@@ -10,7 +10,7 @@ class Luo3App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Luo3 App',
       home: HomePage(),

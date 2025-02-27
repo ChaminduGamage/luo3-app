@@ -10,6 +10,5 @@ class HomePage extends StatelessWidget {
         child: Text('Hello World!'),
       ),
     );
-    ;
   }
 }
