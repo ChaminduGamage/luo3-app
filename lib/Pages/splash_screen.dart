@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/Theme/colors.dart';
 import 'package:luo3_app/components/custom_clipper.dart';
+import 'package:luo3_app/components/primary_button.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -31,7 +32,7 @@ class SplashPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,25 +95,7 @@ class SplashPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     width: double.infinity,
                     height: 60,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Luo3Colors.primary,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                      child: Text(
-                        "Let's Get Started",
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Luo3Colors.background,
-                        ),
-                      ),
-                    ),
+                    child: const PrimaryButton(title: "Let's Get Started"),
                   ),
                   Container(
                     width: double.infinity,
