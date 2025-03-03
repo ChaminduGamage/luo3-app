@@ -6,19 +6,35 @@ class SplashPageLogo extends StatefulWidget {
   const SplashPageLogo({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SplashPageLogoState createState() => _SplashPageLogoState();
 }
 
 class _SplashPageLogoState extends State<SplashPageLogo> {
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        _isLoading = false;
+      });
+
+      // Custom transition when navigating to SplashPage
       Navigator.pushReplacement(
-        // ignore: use_build_context_synchronously
         context,
-        MaterialPageRoute(builder: (context) => const SplashPage()),
+        PageRouteBuilder(
+          transitionDuration:
+              const Duration(milliseconds: 700), // Animation duration
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const SplashPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
       );
     });
   }
@@ -32,13 +48,24 @@ class _SplashPageLogoState extends State<SplashPageLogo> {
         decoration: const BoxDecoration(
           color: Luo3Colors.primary,
         ),
-        child: const Center(
-          child: SizedBox(
-            height: 200,
-            width: 200,
-            child: Image(
-              image: AssetImage('assets/images/splash/luo_logo_white.png'),
-            ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 200,
+                width: 200,
+                child: Image(
+                  image: AssetImage('assets/images/splash/luo_logo_white.png'),
+                ),
+              ),
+              const SizedBox(height: 20),
+              _isLoading
+                  ? const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    )
+                  : Container(),
+            ],
           ),
         ),
       ),
