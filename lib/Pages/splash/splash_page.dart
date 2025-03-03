@@ -13,19 +13,8 @@ class SplashPage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            ClipPath(
-              clipper: CustomClipPath(),
-              child: Container(
-                width: double.infinity,
-                height:
-                    MediaQuery.of(context).size.height * 0.65, // Adjust height
-                decoration: const BoxDecoration(color: Luo3Colors.background),
-                child: const Image(
-                  image: AssetImage(
-                      'assets/images/splash/luo_logo_abstract_circle.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
+            const ClipPathWidgets(
+              imageAsset: 'assets/images/splash/luo_logo_abstract_circle.jpg',
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 40),
