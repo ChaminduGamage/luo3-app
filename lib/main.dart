@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luo3_app/pages/splash/splash_page_logo.dart';
+import 'package:luo3_app/pages/onboarding/onboarding_first_screen.dart';
 
 void main() {
   runApp(const Luo3App());
@@ -14,7 +14,7 @@ class Luo3App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Luo3 App',
       home: SafeArea(
-        child: SplashPageLogo(),
+        child: OnboardingFirstScreen(),
       ),
     );
   }
