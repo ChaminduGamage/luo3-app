@@ -43,6 +43,5 @@ class _SplashPageLogoState extends State<SplashPageLogo> {
         ),
       ),
     );
-    ;
   }
 }
