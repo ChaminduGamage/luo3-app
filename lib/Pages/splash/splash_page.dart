@@ -97,7 +97,7 @@ class SplashPage extends StatelessWidget {
                     height: 60,
                     child: const PrimaryButton(title: "Let's Get Started"),
                   ),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
