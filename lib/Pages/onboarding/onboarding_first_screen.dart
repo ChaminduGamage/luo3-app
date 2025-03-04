@@ -87,7 +87,7 @@ class OnboardingFirstScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
                   child: Text(
-                    "Discover a smarter way to rent vehicles,connecting you with trusted owners quickly and reliably.",
+                    "Discover a smarter way to rent vehicles, connecting you with trusted owners quickly and reliably.",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 16,
@@ -122,6 +122,22 @@ class OnboardingFirstScreen extends StatelessWidget {
                               color: Luo3Colors.primary,
                             ),
                           ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(3, (index) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: index == 0
+                                    ? Luo3Colors.primary
+                                    : Luo3Colors.textSecondary,
+                              ),
+                            );
+                          }),
                         ),
                         GestureDetector(
                           onTap: () {},
