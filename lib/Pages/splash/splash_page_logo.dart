@@ -41,31 +41,34 @@ class _SplashPageLogoState extends State<SplashPageLogo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: Luo3Colors.primary,
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 200,
-                width: 200,
-                child: Image(
-                  image: AssetImage('assets/images/splash/luo_logo_white.png'),
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Luo3Colors.primary,
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: Image(
+                    image:
+                        AssetImage('assets/images/splash/luo_logo_white.png'),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              _isLoading
-                  ? const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    )
-                  : Container(),
-            ],
+                const SizedBox(height: 20),
+                _isLoading
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : Container(),
+              ],
+            ),
           ),
         ),
       ),

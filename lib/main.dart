@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luo3_app/pages/onboarding/onboarding_first_screen.dart';
+import 'package:luo3_app/pages/onboarding/onboarding_first_page.dart';
 
 void main() {
   runApp(const Luo3App());

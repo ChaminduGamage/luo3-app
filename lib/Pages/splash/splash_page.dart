@@ -9,9 +9,9 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
           children: [
             const ClipPathWidgets(
               imageAsset: 'assets/images/splash/luo_logo_abstract_circle.jpg',
@@ -84,7 +84,9 @@ class SplashPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     width: double.infinity,
                     height: 60,
-                    child: const PrimaryButton(title: "Let's Get Started"),
+                    child: const PrimaryButton(
+                      title: "Let's Get Started",
+                    ),
                   ),
                   SizedBox(
                     width: double.infinity,
