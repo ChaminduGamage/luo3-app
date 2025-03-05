@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/Theme/colors.dart';
+import 'package:luo3_app/pages/onboarding/onboarding_first_page.dart';
+import 'package:luo3_app/theme/colors.dart';
 import 'package:luo3_app/components/custom_clipper.dart';
 import 'package:luo3_app/components/primary_button.dart';
 
@@ -70,7 +71,7 @@ class SplashPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     width: double.infinity,
                     child: Text(
-                      "Discover a smarter way to rent vehicles,connecting you with trusted owners quickly and reliably.",
+                      "Discover a smarter way to rent vehicles, connecting you with trusted owners quickly and reliably.",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         fontSize: 16,
@@ -84,8 +85,27 @@ class SplashPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     width: double.infinity,
                     height: 60,
-                    child: const PrimaryButton(
+                    child: PrimaryButton(
                       title: "Let's Get Started",
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration: const Duration(
+                                milliseconds: 700), // Animation duration
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    const OnboardingFirstScreen(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ),
                   SizedBox(

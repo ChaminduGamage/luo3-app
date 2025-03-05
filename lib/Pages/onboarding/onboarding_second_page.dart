@@ -20,7 +20,6 @@ class OnboardingSecondScreen extends StatelessWidget {
                   'assets/images/onboarding/onboarding_second_image.jpg',
             ),
 
-            /// ✅ Fix Skip Button Placement
             Positioned(
               top: 0, // Adjust as needed
               right: 0,
@@ -37,7 +36,7 @@ class OnboardingSecondScreen extends StatelessWidget {
               ),
             ),
 
-            /// ✅ Bottom Content Section (Aligned Properly)
+            /// Bottom Content Section (Aligned Properly)
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -63,7 +62,7 @@ class OnboardingSecondScreen extends StatelessWidget {
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
                             ),
-                            children: [
+                            children: const [
                               TextSpan(
                                 text: "Driver ",
                                 style: TextStyle(color: Luo3Colors.primary),

@@ -19,7 +19,6 @@ class OnboardingFirstScreen extends StatelessWidget {
               imageAsset: 'assets/images/onboarding/onboarding_first_image.jpg',
             ),
 
-            /// ✅ Fix Skip Button Position (Inside Stack)
             Positioned(
               top: 0,
               right: 0,
@@ -38,14 +37,13 @@ class OnboardingFirstScreen extends StatelessWidget {
               ),
             ),
 
-            /// ✅ Main Content Section (Placed Inside `Align` to Avoid ParentDataWidget Error)
+            ///  Main Content Section (Placed Inside `Align` to Avoid ParentDataWidget Error)
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
                 child: Column(
-                  mainAxisSize:
-                      MainAxisSize.min, // ✅ Fix ParentDataWidget Issue
+                  mainAxisSize: MainAxisSize.min, // Fix ParentDataWidget Issue
                   children: [
                     /// Title
                     Column(
@@ -65,7 +63,7 @@ class OnboardingFirstScreen extends StatelessWidget {
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
                             ),
-                            children: [
+                            children: const [
                               TextSpan(
                                 text: "Rent Vehicles ",
                                 style: TextStyle(color: Luo3Colors.primary),
