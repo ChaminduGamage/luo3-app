@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luo3_app/pages/onboarding/onboarding_first_page.dart';
+import 'package:luo3_app/pages/auth/select_role_page.dart';
 
 void main() {
   runApp(const Luo3App());
@@ -14,7 +14,7 @@ class Luo3App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Luo3 App',
       home: SafeArea(
-        child: OnboardingFirstScreen(),
+        child: SelectRolePage(),
       ),
     );
   }
