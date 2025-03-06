@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/custom_clipper.dart';
+import 'package:luo3_app/pages/auth/select_role_page.dart';
 import 'package:luo3_app/pages/onboarding/onboarding_second_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -176,7 +177,31 @@ class OnboardingThirdScreen extends StatelessWidget {
 
                           // Next Button
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 700),
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const SelectRolePage(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var tween = Tween(
+                                      begin: const Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).chain(
+                                        CurveTween(curve: Curves.easeInOut));
+
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                             child: Container(
                               width: 60,
                               height: 60,

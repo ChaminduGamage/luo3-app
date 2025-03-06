@@ -8,4 +8,5 @@ class Luo3Colors {
   static const Color textPrimary = Color(0xFF232423);
   static const Color textSecondary = Color(0xFF797a7b);
   static const Color checkBoxBorder = Color(0xFFD9D9D9);
+  static const Color scaffoldColor = Color(0xFFFFFFFF);
 }

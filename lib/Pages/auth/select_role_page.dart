@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/components/primary_button.dart';
+import 'package:luo3_app/components/select_role_field.dart';
 import 'package:luo3_app/pages/onboarding/onboarding_third_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -68,7 +70,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
               text: TextSpan(
                 text: "What is your role are you\n",
                 style: GoogleFonts.inter(
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: FontWeight.w600,
                   color: Luo3Colors.textPrimary,
                 ),
@@ -76,7 +78,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
                   TextSpan(
                     text: "login as?",
                     style: GoogleFonts.inter(
-                      fontSize: 24,
+                      fontSize: 22,
                       fontWeight: FontWeight.w600,
                       color: Luo3Colors.textPrimary,
                     ),
@@ -85,60 +87,46 @@ class _SelectRolePageState extends State<SelectRolePage> {
               ),
             ),
             const SizedBox(height: 40),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isChecked = !(isChecked ?? false);
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                width: double.infinity,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: (isChecked ?? false)
-                        ? Luo3Colors.primary
-                        : Luo3Colors.checkBoxBorder, // Change border color
-                    width: 2,
-                  ),
+            const SelectRoleField(title: "As a vehicle owner"),
+            const SizedBox(height: 10),
+            const SelectRoleField(title: "As a vehicle renter"),
+            const SizedBox(height: 10),
+            const SelectRoleField(title: "As a vehicle driver"),
+            const SizedBox(height: 10),
+            const SelectRoleField(title: "As a vehicle rental agancy"),
+            const SizedBox(height: 10),
+            const SelectRoleField(title: "As a vehicle repair shop owner"),
+            const Spacer(),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Luo3Colors.scaffoldColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
                 ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: Transform.scale(
-                        scale: 1.3, // Adjust checkbox size
-                        child: Checkbox(
-                          value: isChecked,
-                          activeColor:
-                              Luo3Colors.primary, // Checked state color
-                          side: const BorderSide(
-                            color: Luo3Colors
-                                .checkBoxBorder, // Change border color when unchecked
-                            width: 2,
-                          ),
-                          onChanged: (newBool) {
-                            setState(() {
-                              isChecked = newBool;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "As a vehicle owner", // Add some text
-                      style: GoogleFonts.inter(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Luo3Colors.textPrimary,
-                      ),
-                    ),
-                  ],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black
+                        // ignore: deprecated_member_use
+                        .withOpacity(0.3), // Shadow color with opacity
+                    blurRadius: 15, // Soft blur effect
+                    spreadRadius: 3, // Spread of the shadow
+                    offset: const Offset(
+                        0, 5), // Moves the shadow downward (drop shadow)
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                child: SizedBox(
+                  height: 60,
+                  width: double.infinity,
+                  child: PrimaryButton(
+                    title: "Create Account",
+                    onPressed: () {},
+                  ),
                 ),
               ),
             ),
