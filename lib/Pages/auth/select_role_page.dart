@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/primary_button.dart';
+import 'package:luo3_app/components/secondary_button.dart';
 import 'package:luo3_app/components/select_role_field.dart';
+import 'package:luo3_app/pages/auth/create_account_page.dart';
 import 'package:luo3_app/pages/onboarding/onboarding_third_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -97,38 +98,25 @@ class _SelectRolePageState extends State<SelectRolePage> {
             const SizedBox(height: 10),
             const SelectRoleField(title: "As a vehicle repair shop owner"),
             const Spacer(),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Luo3Colors.scaffoldColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black
-                        // ignore: deprecated_member_use
-                        .withOpacity(0.3), // Shadow color with opacity
-                    blurRadius: 15, // Soft blur effect
-                    spreadRadius: 3, // Spread of the shadow
-                    offset: const Offset(
-                        0, 5), // Moves the shadow downward (drop shadow)
+            SecondaryButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration:
+                        const Duration(milliseconds: 700), // Animation duration
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const CreateAccountPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
                   ),
-                ],
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                child: SizedBox(
-                  height: 60,
-                  width: double.infinity,
-                  child: PrimaryButton(
-                    title: "Create Account",
-                    onPressed: () {},
-                  ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),

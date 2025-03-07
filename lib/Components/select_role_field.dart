@@ -23,7 +23,7 @@ class _SelectRoleFieldState extends State<SelectRoleField> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
         width: double.infinity,
-        height: 60,
+        height: 55,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
@@ -38,14 +38,14 @@ class _SelectRoleFieldState extends State<SelectRoleField> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2),
               child: Transform.scale(
-                scale: 1.3, // Adjust checkbox size
+                scale: 1.2, // Adjust checkbox size
                 child: Checkbox(
                   value: isChecked,
                   activeColor: Luo3Colors.primary, // Checked state color
                   side: const BorderSide(
                     color: Luo3Colors
                         .checkBoxBorder, // Change border color when unchecked
-                    width: 2,
+                    width: 1.5,
                   ),
                   onChanged: (newBool) {
                     setState(() {
@@ -61,7 +61,7 @@ class _SelectRoleFieldState extends State<SelectRoleField> {
             Text(
               widget.title, // Add some text
               style: GoogleFonts.inter(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
                 color: Luo3Colors.textPrimary,
               ),

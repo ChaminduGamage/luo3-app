@@ -27,7 +27,7 @@ class PrimaryButton extends StatelessWidget {
         title,
         style: GoogleFonts.inter(
           fontSize: 16,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w500,
           color: Luo3Colors.background,
         ),
       ),
