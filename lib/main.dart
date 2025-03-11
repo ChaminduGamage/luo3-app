@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:luo3_app/pages/auth/create_account_page.dart';
 import 'package:luo3_app/pages/auth/verification_page.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class Luo3App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Luo3 App',
       home: SafeArea(
-        child: VerificationPage(),
+        child: CreateAccountPage(),
       ),
     );
   }

@@ -219,7 +219,7 @@ class _VerificationPageState extends State<VerificationPage> {
                     }
                   },
                   child: Text(
-                    "Create Account",
+                    "Verify Account",
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
