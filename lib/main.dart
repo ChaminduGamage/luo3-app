@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:luo3_app/pages/auth/select_role_page.dart';
 import 'package:luo3_app/pages/auth/verification_page.dart';
 
 void main() {

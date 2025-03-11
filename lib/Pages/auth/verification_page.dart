@@ -11,22 +11,31 @@ class VerificationPage extends StatefulWidget {
 }
 
 class _VerificationPageState extends State<VerificationPage> {
-  final FocusNode _focusNode = FocusNode();
-  bool _isFocused = false;
+  final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
+  final List<TextEditingController> _controllers =
+      List.generate(4, (index) => TextEditingController());
+
+  void _handleFocusChange() {
+    setState(() {}); // Triggers UI update when focus changes
+  }
 
   @override
   void initState() {
     super.initState();
-    _focusNode.addListener(() {
-      setState(() {
-        _isFocused = _focusNode.hasFocus;
-      });
-    });
+    for (var node in _focusNodes) {
+      node.addListener(_handleFocusChange);
+    }
   }
 
   @override
   void dispose() {
-    _focusNode.dispose();
+    for (var node in _focusNodes) {
+      node.removeListener(_handleFocusChange); // Properly remove listener
+      node.dispose();
+    }
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -88,7 +97,7 @@ class _VerificationPageState extends State<VerificationPage> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Create Account',
+                      'Verify your account',
                       style: GoogleFonts.inter(
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
@@ -130,88 +139,94 @@ class _VerificationPageState extends State<VerificationPage> {
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
+                children: List.generate(4, (index) {
+                  return Container(
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: _isFocused
+                        color: _focusNodes[index].hasFocus
                             ? Luo3Colors.primary
                             : Luo3Colors.checkBoxBorder,
                         width: 2,
                       ),
                     ),
                     child: TextField(
-                      focusNode: _focusNode,
+                      controller: _controllers[index],
+                      focusNode: _focusNodes[index],
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      maxLength: 1,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
+                        counterText: '',
                       ),
+                      onChanged: (value) {
+                        if (value.isNotEmpty && index < 3) {
+                          FocusScope.of(context).nextFocus();
+                        }
+                      },
+                    ),
+                  );
+                }),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: Text(
+                "Didn’t receive OTP?",
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Luo3Colors.textSecondary,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                minimumSize: Size(0, 0),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: Text(
+                "Resend code",
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Luo3Colors.primary,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+              child: SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Luo3Colors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: _isFocused
-                            ? Luo3Colors.primary
-                            : Luo3Colors.checkBoxBorder,
-                        width: 2,
-                      ),
-                    ),
-                    child: TextField(
-                      focusNode: _focusNode,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                      ),
+                  onPressed: () {
+                    {
+                      // Proceed with account creation logic
+                    }
+                  },
+                  child: Text(
+                    "Create Account",
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
                     ),
                   ),
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: _isFocused
-                            ? Luo3Colors.primary
-                            : Luo3Colors.checkBoxBorder,
-                        width: 2,
-                      ),
-                    ),
-                    child: TextField(
-                      focusNode: _focusNode,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: _isFocused
-                            ? Luo3Colors.primary
-                            : Luo3Colors.checkBoxBorder,
-                        width: 2,
-                      ),
-                    ),
-                    child: TextField(
-                      focusNode: _focusNode,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
