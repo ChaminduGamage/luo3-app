@@ -117,7 +117,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter your name' : null,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     Text("Email",
                         style: GoogleFonts.inter(
                             fontSize: 16,
@@ -164,7 +164,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter your email' : null,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     Text("Password",
                         style: GoogleFonts.inter(
                             fontSize: 16,
