@@ -30,7 +30,7 @@ class _SelectRoleFieldState extends State<SelectRoleField> {
             color: (isChecked ?? false)
                 ? Luo3Colors.primary
                 : Luo3Colors.checkBoxBorder, // Change border color
-            width: 0.5,
+            width: 1.5,
           ),
         ),
         child: Row(
