@@ -4,8 +4,10 @@ import 'package:luo3_app/theme/colors.dart';
 
 class SecondaryButton extends StatefulWidget {
   final VoidCallback onPressed; // Store the function
+  final String name;
 
-  const SecondaryButton({super.key, required this.onPressed});
+  const SecondaryButton(
+      {super.key, required this.onPressed, required this.name});
 
   @override
   State<SecondaryButton> createState() => _SecondayButtonState();
@@ -38,7 +40,7 @@ class _SecondayButtonState extends State<SecondaryButton> {
           height: 60,
           width: double.infinity,
           child: PrimaryButton(
-            title: "Create Account",
+            title: widget.name,
             onPressed: widget.onPressed, // Use the passed function
           ),
         ),

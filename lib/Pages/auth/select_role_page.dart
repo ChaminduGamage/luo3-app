@@ -99,6 +99,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
             const SelectRoleField(title: "As a vehicle repair shop owner"),
             const Spacer(),
             SecondaryButton(
+              name: "Create an account",
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
