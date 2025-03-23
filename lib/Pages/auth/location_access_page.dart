@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/location_access_button.dart';
-import 'package:luo3_app/components/primary_button.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class LocationAccessPage extends StatefulWidget {
