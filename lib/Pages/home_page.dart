@@ -167,42 +167,54 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 300,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            color: Luo3Colors.inputBackground,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 10),
-                              const Icon(
-                                Icons.search,
-                                color: Luo3Colors.textSecondary,
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                'Search for a drink',
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                        GestureDetector(
+                          onTap: () {
+                            // ignore: avoid_print
+                            print('Tapped');
+                          },
+                          child: Container(
+                            width: 300,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              color: Luo3Colors.inputBackground,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 10),
+                                const Icon(
+                                  Icons.search,
                                   color: Luo3Colors.textSecondary,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 10),
+                                Text(
+                                  'Search for a drink',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: Luo3Colors.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Container(
-                          width: 45,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            color: Luo3Colors.accent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(
-                            Icons.filter_list,
-                            color: Luo3Colors.textPrimary,
+                        GestureDetector(
+                          onTap: () {
+                            // ignore: avoid_print
+                            print('Tapped');
+                          },
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              color: Luo3Colors.accent,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.filter_list,
+                              color: Luo3Colors.textPrimary,
+                            ),
                           ),
                         ),
                       ],
