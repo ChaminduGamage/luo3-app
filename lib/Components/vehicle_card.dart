@@ -26,6 +26,7 @@ class _VehicleCardState extends State<VehicleCard> {
                   borderRadius: const BorderRadius.all(Radius.circular(15)),
                   boxShadow: [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: Colors.black.withOpacity(0.1),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
@@ -50,6 +51,7 @@ class _VehicleCardState extends State<VehicleCard> {
                                   const BorderRadius.all(Radius.circular(10)),
                               boxShadow: [
                                 BoxShadow(
+                                  // ignore: deprecated_member_use
                                   color: Colors.black.withOpacity(0.1),
                                   blurRadius: 12,
                                   offset: const Offset(0, 6),
@@ -90,11 +92,12 @@ class _VehicleCardState extends State<VehicleCard> {
                           )
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      Spacer(),
+
                       Row(
                         children: [
                           Icon(Icons.location_on, color: Luo3Colors.primary),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 5),
                           Text(
                             'Location',
                             style: GoogleFonts.inter(
@@ -105,7 +108,7 @@ class _VehicleCardState extends State<VehicleCard> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 20),
                       Row(
                         children: [
                           _specChip('19 KM per Litre'),
@@ -115,6 +118,108 @@ class _VehicleCardState extends State<VehicleCard> {
                           _specChip('4 Seater'),
                         ],
                       ),
+                      const SizedBox(height: 24),
+                      TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: const Size(0, 0),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          "Download Vehicle Report",
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Luo3Colors.primary,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Divider(
+                        // ignore: deprecated_member_use
+                        color: Luo3Colors.textSecondary.withOpacity(0.2),
+                        height: 30,
+                      ),
+                      const SizedBox(height: 5),
+
+                      // Overlapping review circles with add button
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 30,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Positioned(
+                                left: 0,
+                                child: _circleReviewDot(),
+                              ),
+                              Positioned(
+                                left: 12,
+                                child: _circleReviewDot(),
+                              ),
+                              Positioned(
+                                left: 24,
+                                child: _circleReviewDot(),
+                              ),
+                              Positioned(
+                                left: 36,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Handle add button tap
+                                    print('Add button tapped');
+                                  },
+                                  child: _addCircleButton(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '3 Reviews',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Luo3Colors.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'View All',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Luo3Colors.primary,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text.rich(
+                            TextSpan(
+                              text: 'Rs.3000',
+                              style: GoogleFonts.inter(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Luo3Colors.primary,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '/per day',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                    color: Luo3Colors.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -147,11 +252,46 @@ class _VehicleCardState extends State<VehicleCard> {
             text,
             style: GoogleFonts.inter(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
               color: Luo3Colors.textPrimary,
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _circleReviewDot() {
+    return Container(
+      width: 25,
+      height: 25,
+      decoration: BoxDecoration(
+        color: Luo3Colors.checkBoxBorder,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Luo3Colors.background,
+          width: 2,
+        ),
+      ),
+    );
+  }
+
+  Widget _addCircleButton() {
+    return Container(
+      width: 25,
+      height: 25,
+      decoration: BoxDecoration(
+        color: Luo3Colors.primary,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Luo3Colors.background,
+          width: 2,
+        ),
+      ),
+      child: const Icon(
+        Icons.add,
+        size: 16,
+        color: Colors.white,
       ),
     );
   }
