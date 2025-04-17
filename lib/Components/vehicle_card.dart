@@ -12,221 +12,216 @@ class VehicleCard extends StatefulWidget {
 class _VehicleCardState extends State<VehicleCard> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 330,
-                decoration: BoxDecoration(
-                  color: Luo3Colors.inputBackground,
-                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  boxShadow: [
-                    BoxShadow(
-                      // ignore: deprecated_member_use
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 330,
+            decoration: BoxDecoration(
+              color: Luo3Colors.inputBackground,
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
+              boxShadow: [
+                BoxShadow(
+                  // ignore: deprecated_member_use
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            margin: const EdgeInsets.only(right: 16),
-                            decoration: BoxDecoration(
-                              color: Luo3Colors.textSecondary,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              boxShadow: [
-                                BoxShadow(
-                                  // ignore: deprecated_member_use
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 12,
-                                  offset: const Offset(0, 6),
-                                ),
-                              ],
+                      Container(
+                        width: 60,
+                        height: 60,
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                          color: Luo3Colors.textSecondary,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                              // ignore: deprecated_member_use
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 12,
+                              offset: const Offset(0, 6),
                             ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Toyota Premio',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Luo3Colors.textPrimary,
-                                  ),
-                                ),
-                                Text(
-                                  'Comfort Sedan',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Luo3Colors.textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.bookmark),
-                            color: Luo3Colors.primary,
-                            onPressed: () {
-                              // Handle bookmark tap
-                            },
-                          )
-                        ],
-                      ),
-                      Spacer(),
-
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: Luo3Colors.primary),
-                          const SizedBox(width: 5),
-                          Text(
-                            'Location',
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Luo3Colors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          _specChip('19 KM per Litre'),
-                          const SizedBox(width: 5),
-                          _specChip('Manual Gear'),
-                          const SizedBox(width: 5),
-                          _specChip('4 Seater'),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(0, 0),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: Text(
-                          "Download Vehicle Report",
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Luo3Colors.primary,
-                            decoration: TextDecoration.underline,
-                          ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 5),
-                      Divider(
-                        // ignore: deprecated_member_use
-                        color: Luo3Colors.textSecondary.withOpacity(0.2),
-                        height: 30,
-                      ),
-                      const SizedBox(height: 5),
-
-                      // Overlapping review circles with add button
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: SizedBox(
-                          height: 30,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Positioned(
-                                left: 0,
-                                child: _circleReviewDot(),
-                              ),
-                              Positioned(
-                                left: 12,
-                                child: _circleReviewDot(),
-                              ),
-                              Positioned(
-                                left: 24,
-                                child: _circleReviewDot(),
-                              ),
-                              Positioned(
-                                left: 36,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    // Handle add button tap
-                                    print('Add button tapped');
-                                  },
-                                  child: _addCircleButton(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '3 Reviews',
-                            style: GoogleFonts.inter(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Luo3Colors.textPrimary,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            'View All',
-                            style: GoogleFonts.inter(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Luo3Colors.primary,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text.rich(
-                            TextSpan(
-                              text: 'Rs.3000',
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Toyota Premio',
                               style: GoogleFonts.inter(
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color: Luo3Colors.primary,
+                                color: Luo3Colors.textPrimary,
                               ),
-                              children: [
-                                TextSpan(
-                                  text: '/per day',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                    color: Luo3Colors.textSecondary,
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
-                        ],
+                            Text(
+                              'Comfort Sedan',
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Luo3Colors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.bookmark),
+                        color: Luo3Colors.primary,
+                        onPressed: () {
+                          // Handle bookmark tap
+                        },
                       )
                     ],
                   ),
-                ),
+                  const Spacer(),
+
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on, color: Luo3Colors.primary),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Location',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Luo3Colors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      _specChip('19 KM per Litre'),
+                      const SizedBox(width: 5),
+                      _specChip('Manual Gear'),
+                      const SizedBox(width: 5),
+                      _specChip('4 Seater'),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      "Download Vehicle Report",
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Luo3Colors.primary,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Divider(
+                    // ignore: deprecated_member_use
+                    color: Luo3Colors.textSecondary.withOpacity(0.2),
+                    height: 30,
+                  ),
+                  const SizedBox(height: 5),
+
+                  // Overlapping review circles with add button
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      height: 30,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Positioned(
+                            left: 0,
+                            child: _circleReviewDot(),
+                          ),
+                          Positioned(
+                            left: 12,
+                            child: _circleReviewDot(),
+                          ),
+                          Positioned(
+                            left: 24,
+                            child: _circleReviewDot(),
+                          ),
+                          Positioned(
+                            left: 36,
+                            child: GestureDetector(
+                              onTap: () {
+                                // Handle add button tap
+                              },
+                              child: _addCircleButton(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '3 Reviews',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Luo3Colors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'View All',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Luo3Colors.primary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text.rich(
+                        TextSpan(
+                          text: 'Rs.3000',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Luo3Colors.primary,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: '/per day',
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Luo3Colors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -239,6 +234,7 @@ class _VehicleCardState extends State<VehicleCard> {
         borderRadius: const BorderRadius.all(Radius.circular(4)),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.1),
             blurRadius: 12,
             offset: const Offset(0, 6),
