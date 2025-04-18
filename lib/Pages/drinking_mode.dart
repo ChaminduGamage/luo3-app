@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/pages/home_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class DrinkingModePage extends StatefulWidget {
@@ -11,7 +12,7 @@ class DrinkingModePage extends StatefulWidget {
 }
 
 class _DrinkingModePageState extends State<DrinkingModePage> {
-  bool isDrinkingModeOn = false;
+  bool isDrinkingModeOn = true;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -53,6 +54,23 @@ class _DrinkingModePageState extends State<DrinkingModePage> {
                               setState(() {
                                 isDrinkingModeOn = !isDrinkingModeOn;
                               });
+                              Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                  transitionDuration: const Duration(
+                                      milliseconds: 700), // Animation duration
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const HomePage(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             },
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),

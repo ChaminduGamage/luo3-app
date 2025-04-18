@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/Theme/colors.dart';
 import 'package:luo3_app/components/vehicle_card.dart';
+import 'package:luo3_app/pages/drinking_mode.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -54,6 +55,23 @@ class _HomePageState extends State<HomePage> {
                               setState(() {
                                 isDrinkingModeOn = !isDrinkingModeOn;
                               });
+                              Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                  transitionDuration: const Duration(
+                                      milliseconds: 700), // Animation duration
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const DrinkingModePage(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             },
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
