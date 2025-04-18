@@ -437,6 +437,118 @@ class _DrinkingModePageState extends State<DrinkingModePage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 15),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Luo3Colors.inputBackground,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          dividerColor:
+                              Colors.transparent, // Removes default dividers
+                        ),
+                        child: ExpansionTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide.none,
+                          ),
+                          collapsedShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide.none,
+                          ),
+                          title: Text(
+                            'What is Drinking Mode?',
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Luo3Colors.textPrimary,
+                            ),
+                          ),
+                          tilePadding: EdgeInsets.symmetric(horizontal: 16),
+                          collapsedIconColor: Luo3Colors.primary,
+                          iconColor: Luo3Colors.primary,
+                          childrenPadding: EdgeInsets.only(bottom: 8),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 8),
+                              child: Text(
+                                'Drinking Mode is a feature that allows you to call a driver to drive you safely when you’re not in a condition to drive.',
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Luo3Colors.textSecondary,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Luo3Colors.inputBackground,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          dividerColor:
+                              Colors.transparent, // Removes default dividers
+                        ),
+                        child: ExpansionTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide.none,
+                          ),
+                          collapsedShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide.none,
+                          ),
+                          title: Text(
+                            'How to Add a Driver?',
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Luo3Colors.textPrimary,
+                            ),
+                          ),
+                          tilePadding: EdgeInsets.symmetric(horizontal: 16),
+                          collapsedIconColor: Luo3Colors.primary,
+                          iconColor: Luo3Colors.primary,
+                          childrenPadding: EdgeInsets.only(bottom: 8),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 8),
+                              child: Text(
+                                'Drinking Mode ensures a safe ride home after a night out. Before drinking, add a trusted driver and activate the mode. A yellow call button appears for quick access. When ready, tap to call your driver instantly. Enjoy your night responsibly, knowing a reliable ride is just one tap away.',
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Luo3Colors.textSecondary,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
