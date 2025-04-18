@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                                     duration: const Duration(milliseconds: 200),
                                     left: isDrinkingModeOn
                                         ? 21
-                                        : 3, // Adjusted positioning slightly to avoid touching border
+                                        : 1, // Adjusted positioning slightly to avoid touching border
                                     child: Container(
                                       width: 14, // Reverted thumb size
                                       height: 14,
