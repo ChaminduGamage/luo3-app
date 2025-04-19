@@ -2,7 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/nav_bar.dart';
-import 'package:luo3_app/pages/home_page.dart';
+
 import 'package:luo3_app/theme/colors.dart';
 
 class DrinkingModePage extends StatefulWidget {
