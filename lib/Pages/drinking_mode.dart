@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/components/nav_bar.dart';
 import 'package:luo3_app/pages/home_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -61,7 +62,7 @@ class _DrinkingModePageState extends State<DrinkingModePage> {
                                       milliseconds: 700), // Animation duration
                                   pageBuilder: (context, animation,
                                           secondaryAnimation) =>
-                                      const HomePage(),
+                                      const Luo3NavBar(),
                                   transitionsBuilder: (context, animation,
                                       secondaryAnimation, child) {
                                     return FadeTransition(
@@ -490,10 +491,11 @@ class _DrinkingModePageState extends State<DrinkingModePage> {
                               color: Luo3Colors.textPrimary,
                             ),
                           ),
-                          tilePadding: EdgeInsets.symmetric(horizontal: 16),
+                          tilePadding:
+                              const EdgeInsets.symmetric(horizontal: 16),
                           collapsedIconColor: Luo3Colors.primary,
                           iconColor: Luo3Colors.primary,
-                          childrenPadding: EdgeInsets.only(bottom: 8),
+                          childrenPadding: const EdgeInsets.only(bottom: 8),
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -546,10 +548,11 @@ class _DrinkingModePageState extends State<DrinkingModePage> {
                               color: Luo3Colors.textPrimary,
                             ),
                           ),
-                          tilePadding: EdgeInsets.symmetric(horizontal: 16),
+                          tilePadding:
+                              const EdgeInsets.symmetric(horizontal: 16),
                           collapsedIconColor: Luo3Colors.primary,
                           iconColor: Luo3Colors.primary,
-                          childrenPadding: EdgeInsets.only(bottom: 8),
+                          childrenPadding: const EdgeInsets.only(bottom: 8),
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(

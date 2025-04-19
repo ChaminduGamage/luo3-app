@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luo3_app/pages/drinking_mode.dart';
+import 'package:luo3_app/components/nav_bar.dart';
 
 void main() {
   runApp(const Luo3App());
@@ -14,7 +14,7 @@ class Luo3App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Luo3 App',
       home: SafeArea(
-        child: DrinkingModePage(),
+        child: Luo3NavBar(),
       ),
     );
   }
