@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 color: isDrinkingModeOn
                                     ? Luo3Colors.accent
-                                    : Luo3Colors.textSecondary, // Track color
+                                    : Luo3Colors.textSecondary, // Track color+
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
                                     color: Luo3Colors.inputBackground,
