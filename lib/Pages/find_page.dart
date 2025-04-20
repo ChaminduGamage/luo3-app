@@ -185,6 +185,7 @@ class _FindPageState extends State<FindPage> {
                                           BoxShadow(
                                             // ignore: deprecated_member_use
                                             color:
+                                                // ignore: deprecated_member_use
                                                 Colors.black.withOpacity(0.1),
                                             blurRadius: 12,
                                             offset: const Offset(0, 1),
