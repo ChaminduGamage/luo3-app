@@ -20,7 +20,7 @@ class BookingButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          side: BorderSide(color: Luo3Colors.primary, width: 2),
+          side: const BorderSide(color: Luo3Colors.primary, width: 2),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
