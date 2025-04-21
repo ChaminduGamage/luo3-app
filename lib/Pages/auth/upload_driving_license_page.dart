@@ -65,19 +65,16 @@ class _DrivingLicensePageState extends State<DrivingLicensePage> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            'Driving License',
-                            style: GoogleFonts.inter(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              color: Luo3Colors.textPrimary,
-                            ),
-                            overflow:
-                                TextOverflow.ellipsis, // Prevents text overflow
-                          ),
+                      const SizedBox(width: 70),
+                      Text(
+                        'Driving License',
+                        style: GoogleFonts.inter(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: Luo3Colors.textPrimary,
                         ),
+                        overflow:
+                            TextOverflow.ellipsis, // Prevents text overflow
                       ),
                     ],
                   ),

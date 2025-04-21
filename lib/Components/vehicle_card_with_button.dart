@@ -20,7 +20,6 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
         children: [
           Container(
             width: double.infinity,
-            height: 400,
             decoration: BoxDecoration(
               color: Luo3Colors.inputBackground,
               borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -92,8 +91,7 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                       )
                     ],
                   ),
-                  const Spacer(),
-
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       const Icon(Icons.location_on, color: Luo3Colors.primary),
@@ -108,7 +106,7 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       _specChip('19 KM per Litre'),
@@ -118,7 +116,7 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                       _specChip('4 Seater'),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
                   TextButton(
                     onPressed: () {},
                     style: TextButton.styleFrom(
@@ -136,13 +134,12 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5),
+
                   Divider(
                     // ignore: deprecated_member_use
                     color: Luo3Colors.textSecondary.withOpacity(0.2),
                     height: 30,
                   ),
-                  const SizedBox(height: 5),
 
                   // Overlapping review circles with add button
                   Align(

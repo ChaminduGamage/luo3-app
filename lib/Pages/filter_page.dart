@@ -69,18 +69,15 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            'Filter',
-                            style: GoogleFonts.inter(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              color: Luo3Colors.textPrimary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                      const SizedBox(width: 110),
+                      Text(
+                        'Filter',
+                        style: GoogleFonts.inter(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: Luo3Colors.textPrimary,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),

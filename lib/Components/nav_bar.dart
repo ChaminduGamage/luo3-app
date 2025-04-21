@@ -4,7 +4,7 @@ import 'package:luo3_app/pages/chat_page.dart';
 import 'package:luo3_app/pages/find_page.dart';
 import 'package:luo3_app/pages/home_page.dart';
 import 'package:luo3_app/pages/profile_page.dart';
-import 'package:luo3_app/pages/rentings_page.dart';
+import 'package:luo3_app/pages/rentals_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class Luo3NavBar extends StatefulWidget {
@@ -30,7 +30,7 @@ class _Luo3NavBarState extends State<Luo3NavBar> {
   final List<Widget> _pages = const [
     HomePage(),
     FindPage(),
-    RentingsPage(),
+    RentalsPage(),
     ChatPage(),
     ProfilePage()
   ];

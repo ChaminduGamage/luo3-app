@@ -18,7 +18,6 @@ class _VehicleCardState extends State<VehicleCard> {
         children: [
           Container(
             width: double.infinity,
-            height: 330,
             decoration: BoxDecoration(
               color: Luo3Colors.inputBackground,
               borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -90,7 +89,7 @@ class _VehicleCardState extends State<VehicleCard> {
                       )
                     ],
                   ),
-                  const Spacer(),
+                  const SizedBox(height: 20),
 
                   Row(
                     children: [
@@ -106,7 +105,7 @@ class _VehicleCardState extends State<VehicleCard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       _specChip('19 KM per Litre'),
@@ -116,7 +115,7 @@ class _VehicleCardState extends State<VehicleCard> {
                       _specChip('4 Seater'),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
                   TextButton(
                     onPressed: () {},
                     style: TextButton.styleFrom(
@@ -134,13 +133,12 @@ class _VehicleCardState extends State<VehicleCard> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5),
+
                   Divider(
                     // ignore: deprecated_member_use
                     color: Luo3Colors.textSecondary.withOpacity(0.2),
                     height: 30,
                   ),
-                  const SizedBox(height: 5),
 
                   // Overlapping review circles with add button
                   Align(

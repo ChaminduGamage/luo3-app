@@ -69,17 +69,13 @@ class _BookingPageState extends State<BookingPage> {
                                 color: Luo3Colors.textPrimary),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              'Filter',
-                              style: GoogleFonts.inter(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                color: Luo3Colors.textPrimary,
-                              ),
-                            ),
+                        const SizedBox(width: 100),
+                        Text(
+                          'Booking',
+                          style: GoogleFonts.inter(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Luo3Colors.textPrimary,
                           ),
                         ),
                       ],
