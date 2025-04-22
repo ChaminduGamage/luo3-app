@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luo3_app/pages/booking_page.dart';
+import 'package:luo3_app/pages/rent_requesting_page.dart';
 
 void main() {
   runApp(const Luo3App());
@@ -14,7 +14,7 @@ class Luo3App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Luo3 App',
       home: SafeArea(
-        child: BookingPage(),
+        child: RentRequestingPage(),
       ),
     );
   }
