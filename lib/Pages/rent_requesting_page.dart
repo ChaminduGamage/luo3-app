@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/location_access_button.dart';
 import 'package:luo3_app/components/nav_bar.dart';
 import 'package:luo3_app/components/secondary_button.dart';
 import 'package:luo3_app/theme/colors.dart';
