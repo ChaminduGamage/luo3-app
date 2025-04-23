@@ -92,7 +92,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                   const SizedBox(height: 8),
                   Container(
-                    height: 55,
+                    height: 50,
                     decoration: BoxDecoration(
                       color: Luo3Colors.checkBoxBorder,
                       borderRadius: BorderRadius.circular(10),
@@ -142,7 +142,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                   const SizedBox(height: 8),
                   Container(
-                    height: 55,
+                    height: 50,
                     decoration: BoxDecoration(
                       color: Luo3Colors.checkBoxBorder,
                       borderRadius: BorderRadius.circular(10),
@@ -200,7 +200,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       );
                     },
                     child: Container(
-                      height: 55,
+                      height: 50,
                       decoration: BoxDecoration(
                         color: Luo3Colors.checkBoxBorder,
                         borderRadius: BorderRadius.circular(10),

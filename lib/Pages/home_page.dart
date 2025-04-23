@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/Theme/colors.dart';
 import 'package:luo3_app/components/vehicle_card.dart';
 import 'package:luo3_app/pages/drinking_mode.dart';
+import 'package:luo3_app/pages/filter_page.dart';
+import 'package:animations/animations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -221,8 +223,25 @@ class _HomePageState extends State<HomePage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              // ignore: avoid_print
-                              print('Tapped');
+                              Navigator.of(context).pushReplacement(
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const FilterPage(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return SharedAxisTransition(
+                                      animation: animation,
+                                      secondaryAnimation: secondaryAnimation,
+                                      transitionType:
+                                          SharedAxisTransitionType.horizontal,
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             },
                             child: Container(
                               width: 45,

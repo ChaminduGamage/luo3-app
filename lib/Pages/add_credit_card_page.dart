@@ -45,7 +45,7 @@ class _AddCardPageState extends State<AddCardPage> {
         ),
         const SizedBox(height: 8),
         Container(
-          height: 55,
+          height: 50,
           decoration: BoxDecoration(
             color: Luo3Colors.checkBoxBorder,
             borderRadius: BorderRadius.circular(10),
