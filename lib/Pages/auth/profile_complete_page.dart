@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/secondary_button.dart';
-import 'package:luo3_app/pages/auth/create_account_page.dart';
+import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class ProfileCompletePage extends StatefulWidget {
@@ -16,6 +16,7 @@ class _ProfileCompletePageState extends State<ProfileCompletePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
+  final AuthServices _auth = AuthServices();
 
   bool? isChecked = false;
 
@@ -42,28 +43,28 @@ class _ProfileCompletePageState extends State<ProfileCompletePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration:
-                                  const Duration(milliseconds: 700),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const CreateAccountPage(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                var tween = Tween(
-                                  begin: const Offset(-1.0, 0.0),
-                                  end: Offset.zero,
-                                ).chain(CurveTween(curve: Curves.easeInOut));
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   PageRouteBuilder(
+                          //     transitionDuration:
+                          //         const Duration(milliseconds: 700),
+                          //     pageBuilder:
+                          //         (context, animation, secondaryAnimation) =>
+                          //             const CreateAccountPage(),
+                          //     transitionsBuilder: (context, animation,
+                          //         secondaryAnimation, child) {
+                          //       var tween = Tween(
+                          //         begin: const Offset(-1.0, 0.0),
+                          //         end: Offset.zero,
+                          //       ).chain(CurveTween(curve: Curves.easeInOut));
 
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
+                          //       return SlideTransition(
+                          //         position: animation.drive(tween),
+                          //         child: child,
+                          //       );
+                          //     },
+                          //   ),
+                          // );
                         },
                         child: Container(
                           width: 50,
@@ -214,9 +215,17 @@ class _ProfileCompletePageState extends State<ProfileCompletePage> {
               width: double.infinity,
               child: SecondaryButton(
                 name: "Continue",
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     // Proceed with account creation logic
+                    await _auth.setProfile(
+                      fullName: _nameController.text,
+                      phoneNumber: _phoneController.text,
+                      age: int.parse(_ageController.text),
+                    );
+
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/verification', (route) => false);
                   }
                 },
               ),

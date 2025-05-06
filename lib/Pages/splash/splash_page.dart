@@ -4,6 +4,7 @@ import 'package:luo3_app/pages/onboarding/onboarding_first_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 import 'package:luo3_app/components/custom_clipper.dart';
 import 'package:luo3_app/components/primary_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -87,21 +88,22 @@ class SplashPage extends StatelessWidget {
                     height: 60,
                     child: PrimaryButton(
                       title: "Let's Get Started",
-                      onPressed: () {
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('hasSeenSplash', true);
+
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
-                            transitionDuration: const Duration(
-                                milliseconds: 700), // Animation duration
+                            transitionDuration:
+                                const Duration(milliseconds: 700),
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
                                     const OnboardingFirstScreen(),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
                               return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
+                                  opacity: animation, child: child);
                             },
                           ),
                         );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:luo3_app/components/nav_bar.dart';
 import 'package:luo3_app/theme/colors.dart';
 import 'package:luo3_app/pages/splash/splash_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPageLogo extends StatefulWidget {
   const SplashPageLogo({super.key});
@@ -12,9 +14,19 @@ class SplashPageLogo extends StatefulWidget {
 class _SplashPageLogoState extends State<SplashPageLogo> {
   bool _isLoading = true;
 
+  Future<bool> _checkOnboardingStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? hasCompleted = prefs.getBool('hasCompletedOnboarding');
+
+    return hasCompleted ?? false;
+  }
+
   @override
   void initState() {
     super.initState();
+
+    _checkOnboardingStatus();
+
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _isLoading = false;
@@ -26,8 +38,22 @@ class _SplashPageLogoState extends State<SplashPageLogo> {
         PageRouteBuilder(
           transitionDuration:
               const Duration(milliseconds: 700), // Animation duration
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const SplashPage(),
+          pageBuilder: (context, animation, secondaryAnimation) {
+            final nextPage = _checkOnboardingStatus().then(
+              (hasCompleted) =>
+                  hasCompleted ? const Luo3NavBar() : const SplashPage(),
+            );
+            return FutureBuilder(
+              future: nextPage,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData) {
+                  return snapshot.data as Widget;
+                }
+                return const SizedBox.shrink(); // Placeholder while waiting
+              },
+            );
+          },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: animation,
@@ -49,11 +75,11 @@ class _SplashPageLogoState extends State<SplashPageLogo> {
           decoration: const BoxDecoration(
             color: Luo3Colors.primary,
           ),
-          child: Center(
+          child: const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
+                SizedBox(
                   height: 200,
                   width: 200,
                   child: Image(
@@ -61,12 +87,6 @@ class _SplashPageLogoState extends State<SplashPageLogo> {
                         AssetImage('assets/images/splash/luo_logo_white.png'),
                   ),
                 ),
-                const SizedBox(height: 20),
-                _isLoading
-                    ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      )
-                    : Container(),
               ],
             ),
           ),

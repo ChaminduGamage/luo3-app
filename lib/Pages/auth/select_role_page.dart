@@ -7,7 +7,9 @@ import 'package:luo3_app/pages/onboarding/onboarding_third_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class SelectRolePage extends StatefulWidget {
-  const SelectRolePage({super.key});
+  final Function toggle;
+
+  const SelectRolePage({super.key, required this.toggle});
 
   @override
   State<SelectRolePage> createState() => _SelectRolePageState();
@@ -15,6 +17,8 @@ class SelectRolePage extends StatefulWidget {
 
 class _SelectRolePageState extends State<SelectRolePage> {
   bool? isChecked = false;
+
+  String? selectedRole;
 
   @override
   Widget build(BuildContext context) {
@@ -88,35 +92,83 @@ class _SelectRolePageState extends State<SelectRolePage> {
               ),
             ),
             const SizedBox(height: 40),
-            const SelectRoleField(title: "As a vehicle owner"),
+            SelectRoleField(
+              title: "As a vehicle owner",
+              isSelected: selectedRole == "Vehicle Owner",
+              onTap: () {
+                setState(() {
+                  selectedRole = "Vehicle Owner";
+                });
+              },
+            ),
             const SizedBox(height: 10),
-            const SelectRoleField(title: "As a vehicle renter"),
+            SelectRoleField(
+              title: "As a vehicle renter",
+              isSelected: selectedRole == "Vehicle Renter",
+              onTap: () {
+                setState(() {
+                  selectedRole = "Vehicle Renter";
+                });
+              },
+            ),
             const SizedBox(height: 10),
-            const SelectRoleField(title: "As a vehicle driver"),
+            SelectRoleField(
+              title: "As a vehicle driver",
+              isSelected: selectedRole == "Vehicle Driver",
+              onTap: () {
+                setState(() {
+                  selectedRole = "Vehicle Driver";
+                });
+              },
+            ),
             const SizedBox(height: 10),
-            const SelectRoleField(title: "As a vehicle rental agancy"),
+            SelectRoleField(
+              title: "As a vehicle rental agency",
+              isSelected: selectedRole == "Rental Agency",
+              onTap: () {
+                setState(() {
+                  selectedRole = "Rental Agency";
+                });
+              },
+            ),
             const SizedBox(height: 10),
-            const SelectRoleField(title: "As a vehicle repair shop owner"),
+            SelectRoleField(
+              title: "As a vehicle repair shop owner",
+              isSelected: selectedRole == "Repair Shop Owner",
+              onTap: () {
+                setState(() {
+                  selectedRole = "Repair Shop Owner";
+                });
+              },
+            ),
             const Spacer(),
             SecondaryButton(
               name: "Create an account",
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration:
-                        const Duration(milliseconds: 700), // Animation duration
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        const CreateAccountPage(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                  ),
-                );
+                if (selectedRole != null) {
+                  // Navigate to Register Page and pass selectedRole
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CreateAccountPage(
+                          toggle: widget.toggle, selectedRole: selectedRole!),
+                    ),
+                  );
+                } else {
+                  // Show alert dialog if no role selected
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Please select a role"),
+                      actions: [
+                        TextButton(
+                          child: const Text("OK"),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
             ),
           ],

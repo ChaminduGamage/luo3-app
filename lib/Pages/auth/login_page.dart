@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final Function toggle;
+  const LoginPage({super.key, required this.toggle});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final AuthServices _auth = AuthServices(); // ✅ Moved here
+
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController = TextEditingController();
@@ -19,9 +23,11 @@ class _LoginPageState extends State<LoginPage> {
   bool? isChecked = false;
 
   // Focus state variables
-
   bool _isEmailFocused = false;
   bool _isPasswordFocused = false;
+
+  String email = '';
+  String password = '';
 
   @override
   void dispose() {
@@ -107,11 +113,13 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         setState(() {
                           _isEmailFocused = true;
+                          email = _emailController.text;
                         });
                       },
                       onEditingComplete: () {
                         setState(() {
                           _isEmailFocused = false;
+                          email = _emailController.text;
                         });
                       },
                       validator: (value) =>
@@ -165,11 +173,13 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         setState(() {
                           _isPasswordFocused = true;
+                          password = _passwordController.text;
                         });
                       },
                       onEditingComplete: () {
                         setState(() {
                           _isPasswordFocused = false;
+                          password = _passwordController.text;
                         });
                       },
                       validator: (value) => value!.length < 6
@@ -244,9 +254,24 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(50),
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            // Proceed with account creation logic
+                            // ✅ Fixed here to use _auth in _LoginPageState
+                            dynamic result =
+                                await _auth.signInWithEmailAndPassword(
+                              _emailController.text,
+                              _passwordController.text,
+                            );
+                            if (result == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Invalid email or password"),
+                                ),
+                              );
+                            } else {
+                              Navigator.pushReplacementNamed(
+                                  context, '/default-home');
+                            }
                           }
                         },
                         child: Text(
@@ -311,7 +336,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Already have in account?",
+                          "Don't have an account?",
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -320,7 +345,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(width: 4.0),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            widget.toggle();
+                          },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
                             minimumSize: const Size(0, 0),

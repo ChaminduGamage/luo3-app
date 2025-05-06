@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isDrinkingModeOn = false;
+  String _selectedCategory = 'All Vehicles';
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +211,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   const SizedBox(width: 10),
                                   Text(
-                                    'Search for a drink',
+                                    'Search vehicles',
                                     style: GoogleFonts.inter(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
@@ -295,7 +296,24 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const VehicleCard(),
+              const SizedBox(height: 20.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SizedBox(
+                  // or whatever height fits your VehicleCard
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        VehicleCard(),
+                        SizedBox(width: 10),
+                        VehicleCard(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
@@ -328,8 +346,77 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const VehicleCard(),
+              const SizedBox(height: 5.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _specChip('All Vehicles'),
+                      const SizedBox(width: 5),
+                      _specChip('Car'),
+                      const SizedBox(width: 5),
+                      _specChip('Bikes'),
+                      const SizedBox(width: 5),
+                      _specChip('TukTuk'),
+                      const SizedBox(width: 5),
+                      _specChip('Suv'),
+                      const SizedBox(width: 5),
+                      _specChip('Van'),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SizedBox(
+                  // or whatever height fits your VehicleCard
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        VehicleCard(),
+                        SizedBox(width: 10),
+                        VehicleCard(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _specChip(String label) {
+    final bool isSelected = _selectedCategory == label;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedCategory = label;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? Luo3Colors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? Luo3Colors.primary : Luo3Colors.checkBoxBorder,
+            width: 1.0,
+          ),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? Colors.white : Luo3Colors.textPrimary,
           ),
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/pages/auth/create_account_page.dart';
+import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class VerificationPage extends StatefulWidget {
@@ -11,9 +11,10 @@ class VerificationPage extends StatefulWidget {
 }
 
 class _VerificationPageState extends State<VerificationPage> {
-  final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
+  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
   final List<TextEditingController> _controllers =
-      List.generate(4, (index) => TextEditingController());
+      List.generate(6, (index) => TextEditingController());
+  final AuthServices _auth = AuthServices();
 
   void _handleFocusChange() {
     setState(() {}); // Triggers UI update when focus changes
@@ -22,6 +23,7 @@ class _VerificationPageState extends State<VerificationPage> {
   @override
   void initState() {
     super.initState();
+
     for (var node in _focusNodes) {
       node.addListener(_handleFocusChange);
     }
@@ -49,26 +51,26 @@ class _VerificationPageState extends State<VerificationPage> {
               alignment: AlignmentDirectional.topStart,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 700),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const CreateAccountPage(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        var tween = Tween(
-                          begin: const Offset(-1.0, 0.0),
-                          end: Offset.zero,
-                        ).chain(CurveTween(curve: Curves.easeInOut));
+                  // Navigator.pushReplacement(
+                  //   context,
+                  //   PageRouteBuilder(
+                  //     transitionDuration: const Duration(milliseconds: 700),
+                  //     pageBuilder: (context, animation, secondaryAnimation) =>
+                  //         const CreateAccountPage(),
+                  //     transitionsBuilder:
+                  //         (context, animation, secondaryAnimation, child) {
+                  //       var tween = Tween(
+                  //         begin: const Offset(-1.0, 0.0),
+                  //         end: Offset.zero,
+                  //       ).chain(CurveTween(curve: Curves.easeInOut));
 
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
+                  //       return SlideTransition(
+                  //         position: animation.drive(tween),
+                  //         child: child,
+                  //       );
+                  //     },
+                  //   ),
+                  // );
                 },
                 child: Container(
                   margin: const EdgeInsets.only(top: 20, left: 20),
@@ -136,42 +138,44 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(4, (index) {
-                  return Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: _focusNodes[index].hasFocus
-                            ? Luo3Colors.primary
-                            : Luo3Colors.checkBoxBorder,
-                        width: 2,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(6, (index) {
+                    return Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: _focusNodes[index].hasFocus
+                                ? Luo3Colors.primary
+                                : Luo3Colors.checkBoxBorder,
+                            width: 2,
+                          ),
+                        ),
+                        child: TextField(
+                          controller: _controllers[index],
+                          focusNode: _focusNodes[index],
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          maxLength: 1,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            counterText: '',
+                          ),
+                          onChanged: (value) {
+                            if (value.isNotEmpty && index < 5) {
+                              FocusScope.of(context).nextFocus();
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                    child: TextField(
-                      controller: _controllers[index],
-                      focusNode: _focusNodes[index],
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      maxLength: 1,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        counterText: '',
-                      ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty && index < 3) {
-                          FocusScope.of(context).nextFocus();
-                        }
-                      },
-                    ),
-                  );
-                }),
-              ),
-            ),
+                    );
+                  }),
+                )),
             const SizedBox(height: 20),
             Center(
               child: Text(
@@ -184,14 +188,17 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                String? phone = await _auth.getPhoneNumber();
+                await _auth.verifyPhoneNumber(phone!);
+              },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
                 minimumSize: const Size(0, 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               child: Text(
-                "Resend code",
+                "Send code",
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
@@ -213,9 +220,29 @@ class _VerificationPageState extends State<VerificationPage> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  onPressed: () {
-                    {
-                      // Proceed with account creation logic
+                  onPressed: () async {
+                    // Combine all 6 input fields into one code string
+                    String smsCode = _controllers.map((c) => c.text).join();
+
+                    // Validate the OTP length before proceeding
+                    if (smsCode.length < 6) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text("Please enter the full 6-digit code")),
+                      );
+                      return;
+                    }
+
+                    // Attempt to sign in using the SMS code
+                    bool success = await _auth.signInWithSmsCode(smsCode);
+
+                    if (success) {
+                      Navigator.pushReplacementNamed(context, '/default-home');
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Verification failed")),
+                      );
                     }
                   },
                   child: Text(

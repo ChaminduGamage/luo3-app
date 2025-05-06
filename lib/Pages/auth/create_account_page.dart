@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateAccountPage extends StatefulWidget {
-  const CreateAccountPage({super.key});
+  final String selectedRole;
+  final Function toggle;
+  CreateAccountPage({
+    super.key,
+    required this.toggle,
+    required this.selectedRole,
+  });
 
   @override
   State<CreateAccountPage> createState() => _CreateAccountPageState();
+  final AuthServices _auth = AuthServices();
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
@@ -18,10 +27,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   bool? isChecked = false;
 
-  // Focus state variables
   bool _isNameFocused = false;
   bool _isEmailFocused = false;
   bool _isPasswordFocused = false;
+
+  String name = '';
+  String email = '';
+  String password = '';
 
   @override
   void dispose() {
@@ -70,7 +82,21 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Selected Role: ${widget.selectedRole}',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Luo3Colors.textSecondary,
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 30),
+
+                    // Name
                     Text("Name",
                         style: GoogleFonts.inter(
                             fontSize: 16,
@@ -78,46 +104,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             color: Luo3Colors.textPrimary)),
                     TextFormField(
                       controller: _nameController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: _isNameFocused
-                            ? Colors.transparent
-                            : Luo3Colors.checkBoxBorder,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: Luo3Colors.checkBoxBorder),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: Luo3Colors.primary, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Colors.red),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: Colors.red, width: 2),
-                        ),
-                        hintText: "Enter your name",
-                      ),
-                      onTap: () {
-                        setState(() {
-                          _isNameFocused = true;
-                        });
-                      },
-                      onEditingComplete: () {
-                        setState(() {
-                          _isNameFocused = false;
-                        });
-                      },
+                      decoration:
+                          _inputDecoration("Enter your name", _isNameFocused),
+                      onTap: () => setState(() => _isNameFocused = true),
+                      onEditingComplete: () =>
+                          setState(() => _isNameFocused = false),
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter your name' : null,
                     ),
                     const SizedBox(height: 15),
+
+                    // Email
                     Text("Email",
                         style: GoogleFonts.inter(
                             fontSize: 16,
@@ -125,46 +122,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             color: Luo3Colors.textPrimary)),
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: _isEmailFocused
-                            ? Colors.transparent
-                            : Luo3Colors.checkBoxBorder,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: Luo3Colors.checkBoxBorder),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: Luo3Colors.primary, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Colors.red),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: Colors.red, width: 2),
-                        ),
-                        hintText: "Enter your email",
-                      ),
-                      onTap: () {
-                        setState(() {
-                          _isEmailFocused = true;
-                        });
-                      },
-                      onEditingComplete: () {
-                        setState(() {
-                          _isEmailFocused = false;
-                        });
-                      },
+                      decoration:
+                          _inputDecoration("Enter your email", _isEmailFocused),
+                      onTap: () => setState(() => _isEmailFocused = true),
+                      onEditingComplete: () =>
+                          setState(() => _isEmailFocused = false),
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter your email' : null,
                     ),
                     const SizedBox(height: 15),
+
+                    // Password
                     Text("Password",
                         style: GoogleFonts.inter(
                             fontSize: 16,
@@ -173,78 +141,44 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: _isPasswordFocused
-                            ? Colors.transparent
-                            : Luo3Colors.checkBoxBorder,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: Luo3Colors.checkBoxBorder),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: Luo3Colors.primary, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Colors.red),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: Colors.red, width: 2),
-                        ),
-                        hintText: "Enter your password",
+                      decoration: _inputDecoration(
+                              "Enter your password", _isPasswordFocused)
+                          .copyWith(
                         suffixIcon: IconButton(
                           icon: Icon(_obscurePassword
                               ? Icons.visibility_off
                               : Icons.visibility),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
+                          onPressed: () => setState(
+                              () => _obscurePassword = !_obscurePassword),
                         ),
                       ),
-                      onTap: () {
-                        setState(() {
-                          _isPasswordFocused = true;
-                        });
-                      },
-                      onEditingComplete: () {
-                        setState(() {
-                          _isPasswordFocused = false;
-                        });
-                      },
+                      onTap: () => setState(() => _isPasswordFocused = true),
+                      onEditingComplete: () =>
+                          setState(() => _isPasswordFocused = false),
                       validator: (value) => value!.length < 6
                           ? 'Password must be at least 6 characters'
                           : null,
                     ),
+
+                    // Terms Checkbox
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Row(
                         children: [
                           Transform.scale(
-                            scale: 1.2, // Reducing the checkbox size
+                            scale: 1.2,
                             child: Checkbox(
                               value: isChecked,
                               activeColor: Luo3Colors.primary,
-                              visualDensity:
-                                  VisualDensity.compact, // Removes extra space
-                              materialTapTargetSize: MaterialTapTargetSize
-                                  .shrinkWrap, // Shrinks tap area
+                              visualDensity: VisualDensity.compact,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
                               side: const BorderSide(
                                 color: Luo3Colors.checkBoxBorder,
                                 width: 1.5,
                               ),
-                              onChanged: (newBool) {
-                                setState(() {
-                                  isChecked = newBool;
-                                });
-                              },
+                              onChanged: (newBool) =>
+                                  setState(() => isChecked = newBool),
                             ),
                           ),
                           Padding(
@@ -258,7 +192,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 2.0),
                           TextButton(
                             onPressed: () {},
                             style: TextButton.styleFrom(
@@ -279,7 +212,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         ],
                       ),
                     ),
+
                     const SizedBox(height: 30),
+
+                    // Submit Button
                     SizedBox(
                       width: double.infinity,
                       height: 60,
@@ -291,9 +227,37 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             borderRadius: BorderRadius.circular(50),
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            // Proceed with account creation logic
+                            dynamic result =
+                                await widget._auth.registerWithEmailAndPassword(
+                              _emailController.text,
+                              _passwordController.text,
+                              widget.selectedRole,
+                            );
+
+                            if (result == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Error creating account'),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Account created successfully'),
+                                ),
+                              );
+
+                              // ✅ Mark onboarding as completed
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              await prefs.setBool(
+                                  'hasCompletedOnboarding', true);
+
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  '/profile-complete', (route) => false);
+                            }
                           }
                         },
                         child: Text(
@@ -307,6 +271,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       ),
                     ),
                     const SizedBox(height: 30),
+
+                    // Social login placeholder
                     Center(
                       child: Text(
                         "Or sign up with",
@@ -320,41 +286,28 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            color: Luo3Colors.checkBoxBorder,
-                            borderRadius: BorderRadius.circular(50),
+                      children: List.generate(3, (_) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Luo3Colors.checkBoxBorder,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Container(
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            color: Luo3Colors.checkBoxBorder,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Container(
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            color: Luo3Colors.checkBoxBorder,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                        ),
-                      ],
+                        );
+                      }),
                     ),
                     const SizedBox(height: 40),
+
+                    // Go to Sign In
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Already have in account?",
+                          "Already have an account?",
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -363,7 +316,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         ),
                         const SizedBox(width: 4.0),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            widget.toggle();
+                          },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
                             minimumSize: const Size(0, 0),
@@ -387,6 +342,30 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           ),
         ),
       ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String hintText, bool isFocused) {
+    return InputDecoration(
+      filled: true,
+      fillColor: isFocused ? Colors.transparent : Luo3Colors.checkBoxBorder,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Luo3Colors.checkBoxBorder),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Luo3Colors.primary, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.red),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.red, width: 2),
+      ),
+      hintText: hintText,
     );
   }
 }

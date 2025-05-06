@@ -181,16 +181,20 @@ class _FindPageState extends State<FindPage> {
                                             ? Luo3Colors.primary
                                             : Luo3Colors.inputBackground,
                                         borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            // ignore: deprecated_member_use
-                                            color:
-                                                // ignore: deprecated_member_use
-                                                Colors.black.withOpacity(0.1),
-                                            blurRadius: 12,
-                                            offset: const Offset(0, 1),
-                                          ),
-                                        ],
+                                        border: Border.all(
+                                          color: Luo3Colors.checkBoxBorder,
+                                          width: 1.0,
+                                        ),
+                                        // boxShadow: [
+                                        //   BoxShadow(
+                                        // ignore: deprecated_member_use
+                                        //     color:
+                                        // ignore: deprecated_member_use
+                                        //         Colors.black.withOpacity(0.1),
+                                        //     blurRadius: 12.0,
+                                        //     offset: const Offset(0, 1),
+                                        //   ),
+                                        // ],
                                       ),
                                       child: Column(
                                         mainAxisAlignment:

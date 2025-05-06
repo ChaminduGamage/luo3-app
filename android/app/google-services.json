@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1057551663805",
+    "project_id": "luo3app",
+    "storage_bucket": "luo3app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057551663805:android:a22d4df5a00214eedc2dd4",
+        "android_client_info": {
+          "package_name": "com.example.luo3_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057551663805-5gl47mej1ev2p0q6j1qtjkdritqlrla0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.luo3_app",
+            "certificate_hash": "6343c6372b86685ab7311b377868830ea19e0bb4"
+          }
+        },
+        {
+          "client_id": "1057551663805-d84r1bg00dn4h8ahq3goig93n04kq6v4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2Uk-QD75a0tCDcYFLRbDTjYCmWc-pFq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057551663805-d84r1bg00dn4h8ahq3goig93n04kq6v4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

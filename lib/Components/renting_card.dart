@@ -137,7 +137,7 @@ class _RentingCardState extends State<RentingCard> {
                             ],
                           ),
                           Text(
-                            '5 Mins Away',
+                            'GR 6456',
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,

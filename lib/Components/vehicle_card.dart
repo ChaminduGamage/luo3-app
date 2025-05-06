@@ -12,23 +12,22 @@ class VehicleCard extends StatefulWidget {
 class _VehicleCardState extends State<VehicleCard> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 5.0,
+          ),
+          child: Container(
+            width:
+                MediaQuery.of(context).size.width * 0.85, // 80% of screen width
             decoration: BoxDecoration(
               color: Luo3Colors.inputBackground,
               borderRadius: const BorderRadius.all(Radius.circular(15)),
-              boxShadow: [
-                BoxShadow(
-                  // ignore: deprecated_member_use
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
-                ),
-              ],
+              border: Border.all(
+                color: Luo3Colors.checkBoxBorder,
+                width: 1.0,
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -219,8 +218,8 @@ class _VehicleCardState extends State<VehicleCard> {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

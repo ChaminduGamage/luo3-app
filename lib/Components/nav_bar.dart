@@ -27,11 +27,14 @@ class _Luo3NavBarState extends State<Luo3NavBar> {
     Icons.person,
   ];
 
-  final List<Widget> _pages = const [
-    HomePage(),
-    FindPage(),
-    RentalsPage(),
-    ChatPage(),
+  final List<Widget> _pages = [
+    const HomePage(),
+    const FindPage(),
+    const RentalsPage(),
+    const ChatOpenPage(
+      name: 'Default Name', // Replace with the appropriate value
+      role: 'Default Role', // Replace with the appropriate value
+    ),
     ProfilePage()
   ];
 

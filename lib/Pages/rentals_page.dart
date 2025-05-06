@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/components/active_renting_card.dart';
+import 'package:luo3_app/components/booking_renting_card.dart';
+import 'package:luo3_app/components/complete_renting_card.dart';
 import 'package:luo3_app/components/nav_bar.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -127,13 +130,13 @@ class _RentalsPageState extends State<RentalsPage> {
                       child: TabBarView(
                         children: [
                           Center(
-                            child: Text('Active Rentals'),
+                            child: ActiveRentingCard(),
                           ),
                           Center(
-                            child: Text('Completed Rentals'),
+                            child: CompleteRentignCard(),
                           ),
                           Center(
-                            child: Text('Booking Details'),
+                            child: BookingRentingCard(),
                           ),
                         ],
                       ),

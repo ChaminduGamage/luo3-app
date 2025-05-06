@@ -2,24 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/theme/colors.dart';
 
-class SelectRoleField extends StatefulWidget {
+class SelectRoleField extends StatelessWidget {
   final String title;
-  const SelectRoleField({super.key, required this.title});
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  @override
-  State<SelectRoleField> createState() => _SelectRoleFieldState();
-}
+  const SelectRoleField({
+    super.key,
+    required this.title,
+    required this.isSelected,
+    required this.onTap,
+  });
 
-class _SelectRoleFieldState extends State<SelectRoleField> {
-  bool? isChecked = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          isChecked = !(isChecked ?? false);
-        });
-      },
+      onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
         width: double.infinity,
@@ -27,9 +25,7 @@ class _SelectRoleFieldState extends State<SelectRoleField> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: (isChecked ?? false)
-                ? Luo3Colors.primary
-                : Luo3Colors.checkBoxBorder, // Change border color
+            color: isSelected ? Luo3Colors.primary : Luo3Colors.checkBoxBorder,
             width: 1.5,
           ),
         ),
@@ -38,28 +34,22 @@ class _SelectRoleFieldState extends State<SelectRoleField> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2),
               child: Transform.scale(
-                scale: 1.2, // Adjust checkbox size
+                scale: 1.2,
                 child: Checkbox(
-                  value: isChecked,
-                  activeColor: Luo3Colors.primary, // Checked state color
+                  value: isSelected,
+                  activeColor: Luo3Colors.primary,
                   side: const BorderSide(
-                    color: Luo3Colors
-                        .checkBoxBorder, // Change border color when unchecked
+                    color: Luo3Colors.checkBoxBorder,
                     width: 1.5,
                   ),
-                  onChanged: (newBool) {
-                    setState(() {
-                      isChecked = newBool;
-                    });
-                  },
+                  onChanged: (_) =>
+                      onTap(), // Trigger parent to update selection
                 ),
               ),
             ),
-            const SizedBox(
-              width: 5,
-            ),
+            const SizedBox(width: 5),
             Text(
-              widget.title, // Add some text
+              title,
               style: GoogleFonts.inter(
                 fontSize: 18,
                 fontWeight: FontWeight.w400,
