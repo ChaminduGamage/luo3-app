@@ -1,6 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:luo3_app/theme/colors.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class FindPage extends StatefulWidget {
   const FindPage({super.key});
@@ -11,32 +17,155 @@ class FindPage extends StatefulWidget {
 
 class _FindPageState extends State<FindPage> {
   int? selectedCardIndex;
+  late GoogleMapController _mapController;
+  StreamSubscription<Position>? _positionStream;
+  Position? _currentPosition;
+  LatLng? _selectedDestination;
+  Set<Polyline> _polylines = {};
+
+  Set<Marker> markers = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _startTracking();
+
+    // Static markers
+    markers.addAll([
+      Marker(
+        markerId: const MarkerId('marker_1'),
+        position: const LatLng(6.9271, 79.8612),
+        infoWindow: const InfoWindow(title: 'Colombo'),
+        onTap: () {
+          _getDirections(const LatLng(6.9271, 79.8612));
+        },
+      ),
+      Marker(
+        markerId: const MarkerId('marker_2'),
+        position: const LatLng(6.032610, 80.631030),
+        infoWindow: const InfoWindow(title: 'Madakuttita Location'),
+        onTap: () {
+          _getDirections(const LatLng(6.032610, 80.631030));
+        },
+      ),
+    ]);
+  }
+
+  Future<void> _startTracking() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.always &&
+          permission != LocationPermission.whileInUse) {
+        return;
+      }
+    }
+
+    _positionStream =
+        Geolocator.getPositionStream().listen((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+
+      LatLng newPosition = LatLng(position.latitude, position.longitude);
+
+      _mapController.animateCamera(
+        CameraUpdate.newLatLng(newPosition),
+      );
+
+      if (_selectedDestination != null) {
+        _getDirections(_selectedDestination!);
+      }
+    });
+  }
+
+  Future<void> _getDirections(LatLng destination) async {
+    if (_currentPosition == null) return;
+
+    final origin =
+        '${_currentPosition!.latitude},${_currentPosition!.longitude}';
+    final dest = '${destination.latitude},${destination.longitude}';
+    const apiKey = 'AIzaSyASPHYoVQsxpwbTTGvYugm-ttNCTY5vpsw';
+
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$dest&key=$apiKey',
+    );
+
+    final response = await http.get(url);
+    final data = jsonDecode(response.body);
+
+    if (data['routes'].isNotEmpty) {
+      final points = data['routes'][0]['overview_polyline']['points'];
+      final polylinePoints = PolylinePoints().decodePolyline(points);
+
+      setState(() {
+        _selectedDestination = destination;
+        _polylines.clear();
+        _polylines.add(Polyline(
+          polylineId: const PolylineId('route'),
+          color: Colors.blue,
+          width: 5,
+          points: polylinePoints
+              .map((e) => LatLng(e.latitude, e.longitude))
+              .toList(),
+        ));
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _positionStream?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Column(
+        body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            GoogleMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(6.9271, 79.8612),
+                zoom: 12.0,
+              ),
+              onMapCreated: (GoogleMapController controller) {
+                _mapController = controller;
+              },
+              markers: markers,
+              polylines: _polylines,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              zoomControlsEnabled: false,
+            ),
+
+            // Search Bar and Filter
+            Positioned(
+              top: 20,
+              left: 20,
+              right: 20,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      // ignore: avoid_print
-                      print('Tapped');
-                    },
+                    // ignore: avoid_print
+                    onTap: () => print('Tapped search'),
                     child: Container(
-                      width: 300,
+                      width: MediaQuery.of(context).size.width - 95,
                       height: 45,
                       decoration: BoxDecoration(
                         color: Luo3Colors.inputBackground,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
-                            // ignore: deprecated_member_use
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
@@ -46,10 +175,8 @@ class _FindPageState extends State<FindPage> {
                       child: Row(
                         children: [
                           const SizedBox(width: 10),
-                          const Icon(
-                            Icons.search,
-                            color: Luo3Colors.textSecondary,
-                          ),
+                          const Icon(Icons.search,
+                              color: Luo3Colors.textSecondary),
                           const SizedBox(width: 10),
                           Text(
                             'Current Location',
@@ -63,11 +190,9 @@ class _FindPageState extends State<FindPage> {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 10),
                   GestureDetector(
-                    onTap: () {
-                      // ignore: avoid_print
-                      print('Tapped');
-                    },
+                    onTap: () => print('Tapped filter'),
                     child: Container(
                       width: 45,
                       height: 45,
@@ -76,34 +201,32 @@ class _FindPageState extends State<FindPage> {
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
-                            // ignore: deprecated_member_use
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
                         ],
                       ),
-                      child: const Icon(
-                        Icons.filter_list,
-                        color: Luo3Colors.textPrimary,
-                      ),
+                      child: const Icon(Icons.filter_list,
+                          color: Luo3Colors.textPrimary),
                     ),
                   ),
                 ],
               ),
             ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+
+            // Bottom card
+            Positioned(
+              bottom: 20,
+              left: 20,
+              right: 20,
               child: Container(
-                width: double.infinity,
                 height: 225,
                 decoration: BoxDecoration(
                   color: Luo3Colors.inputBackground,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      // ignore: deprecated_member_use
                       color: Colors.black.withOpacity(0.1),
                       blurRadius: 12.0,
                       offset: const Offset(0, 6),
@@ -115,10 +238,7 @@ class _FindPageState extends State<FindPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 16.0,
-                        top: 16.0,
-                        bottom: 12.0,
-                      ),
+                          left: 16.0, top: 16.0, bottom: 12.0),
                       child: Text(
                         'What you need?',
                         style: GoogleFonts.inter(
@@ -134,9 +254,7 @@ class _FindPageState extends State<FindPage> {
                         scrollDirection: Axis.horizontal,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 8.0,
-                          ),
+                              horizontal: 8.0, vertical: 8.0),
                           child: Row(
                             children: List.generate(4, (index) {
                               final isSelected = selectedCardIndex == index;
@@ -170,8 +288,6 @@ class _FindPageState extends State<FindPage> {
                                       setState(() {
                                         selectedCardIndex = index;
                                       });
-                                      // ignore: avoid_print
-                                      print('Tapped card index $index');
                                     },
                                     child: Container(
                                       width: 145,
@@ -185,16 +301,6 @@ class _FindPageState extends State<FindPage> {
                                           color: Luo3Colors.checkBoxBorder,
                                           width: 1.0,
                                         ),
-                                        // boxShadow: [
-                                        //   BoxShadow(
-                                        // ignore: deprecated_member_use
-                                        //     color:
-                                        // ignore: deprecated_member_use
-                                        //         Colors.black.withOpacity(0.1),
-                                        //     blurRadius: 12.0,
-                                        //     offset: const Offset(0, 1),
-                                        //   ),
-                                        // ],
                                       ),
                                       child: Column(
                                         mainAxisAlignment:
