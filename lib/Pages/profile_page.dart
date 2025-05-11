@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/pages/bookmark_rentals_page.dart';
+import 'package:luo3_app/pages/emergency_contact.dart';
+import 'package:luo3_app/pages/manage_adress_page.dart';
+import 'package:luo3_app/pages/notification_page.dart';
+import 'package:luo3_app/pages/payment_method_page.dart';
+import 'package:luo3_app/pages/your_profile.dart';
 import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -115,15 +121,74 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 30),
 
                     // Profile Menu Items
-                    _profileTile(Icons.person_outline, 'Your Profile'),
+                    _profileTile(Icons.person_outline, 'Your Profile', () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const YourProfilePage()),
+                      );
+                    }),
                     _profileTile(
-                        Icons.location_on_outlined, 'Manage Your Address'),
-                    _profileTile(Icons.notifications_none, 'Notification'),
-                    _profileTile(Icons.payment, 'Payment Method'),
-                    _profileTile(Icons.bookmark_outline, 'Bookmark Rentals'),
+                      Icons.location_on_outlined,
+                      'Manage Your Address',
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ManageAddressProfileTilePage()),
+                        );
+                      },
+                    ),
+                    _profileTile(
+                      Icons.notifications_outlined,
+                      'Notification',
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const NotificationProfileTilePage()),
+                        );
+                      },
+                    ),
+                    _profileTile(
+                      Icons.credit_card_outlined,
+                      'Payment Method',
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const PaymentMethodProfilePage()),
+                        );
+                      },
+                    ),
+                    _profileTile(
+                      Icons.bookmark_outline,
+                      'Bookmark Rentals',
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const BookmarkRentalsPage()),
+                        );
+                      },
+                    ),
                     _profileTile(Icons.settings_outlined, 'Settings'),
                     _profileTile(
-                        Icons.phone_in_talk_outlined, 'Emergency Contact'),
+                      Icons.phone_in_talk_outlined,
+                      'Emergency Contact',
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const EmergencyContactPage()),
+                        );
+                      },
+                    ),
                     _profileTile(Icons.help_outline, 'Help Centre'),
                     SizedBox(
                       width: double.infinity,
@@ -148,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           }
                         },
                         child: Text(
-                          "Logout Account",
+                          "Logout Your Account",
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -169,13 +234,11 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _profileTile(IconData icon, String label) {
+  Widget _profileTile(IconData icon, String label, [VoidCallback? onTap]) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: InkWell(
-        onTap: () {
-          // Add navigation logic here if needed
-        },
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(

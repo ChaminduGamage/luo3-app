@@ -21,7 +21,7 @@ class _FindPageState extends State<FindPage> {
   StreamSubscription<Position>? _positionStream;
   Position? _currentPosition;
   LatLng? _selectedDestination;
-  Set<Polyline> _polylines = {};
+  final Set<Polyline> _polylines = {};
 
   Set<Marker> markers = {};
 

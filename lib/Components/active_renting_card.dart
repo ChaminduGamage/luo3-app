@@ -255,14 +255,14 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       BookingButton(
-                        title: "Cancel",
+                        title: "Chat with Owner",
                         onPressed: () {
                           // Handle booking button tap
                         },
                       ),
                       const SizedBox(width: 10),
                       RentButton(
-                          title: "Request Rent",
+                          title: "Fnish Rent",
                           onPressed: () {
                             // Handle rent button tap
                           }),

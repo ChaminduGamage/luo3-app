@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/Theme/colors.dart';
 import 'package:luo3_app/components/vehicle_card.dart';
-import 'package:luo3_app/pages/drinking_mode.dart';
-import 'package:luo3_app/pages/filter_page.dart';
-import 'package:animations/animations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -58,23 +55,8 @@ class _HomePageState extends State<HomePage> {
                               setState(() {
                                 isDrinkingModeOn = !isDrinkingModeOn;
                               });
-                              Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                  transitionDuration: const Duration(
-                                      milliseconds: 700), // Animation duration
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const DrinkingModePage(),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
+                              Navigator.pushReplacementNamed(
+                                  context, '/drinking-driving');
                             },
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
@@ -169,16 +151,21 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: Luo3Colors.inputBackground,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Icon(
-                              Icons.notification_important,
-                              color: Luo3Colors.primary,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/notification');
+                            },
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                color: Luo3Colors.inputBackground,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Icon(
+                                Icons.notification_important,
+                                color: Luo3Colors.primary,
+                              ),
                             ),
                           ),
                         ],
@@ -224,25 +211,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                PageRouteBuilder(
-                                  transitionDuration:
-                                      const Duration(milliseconds: 500),
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const FilterPage(),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return SharedAxisTransition(
-                                      animation: animation,
-                                      secondaryAnimation: secondaryAnimation,
-                                      transitionType:
-                                          SharedAxisTransitionType.horizontal,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
+                              Navigator.pushReplacementNamed(
+                                  context, '/filter-vehicle');
                             },
                             child: Container(
                               width: 45,
