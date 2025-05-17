@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/nav_bar.dart';
+
 import 'package:luo3_app/components/secondary_button.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -30,28 +30,8 @@ class _FilterPageState extends State<FilterPage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration:
-                                  const Duration(milliseconds: 700),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const Luo3NavBar(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                var tween = Tween(
-                                  begin: const Offset(-1.0, 0.0),
-                                  end: Offset.zero,
-                                ).chain(CurveTween(curve: Curves.easeInOut));
-
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
+                          Navigator.pushReplacementNamed(
+                              context, '/default-home');
                         },
                         child: Container(
                           width: 50,

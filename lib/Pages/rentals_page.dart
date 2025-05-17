@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/active_renting_card.dart';
 import 'package:luo3_app/components/booking_renting_card.dart';
 import 'package:luo3_app/components/complete_renting_card.dart';
-import 'package:luo3_app/components/nav_bar.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class RentalsPage extends StatefulWidget {
@@ -28,28 +27,8 @@ class _RentalsPageState extends State<RentalsPage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration:
-                                  const Duration(milliseconds: 700),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const Luo3NavBar(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                var tween = Tween(
-                                  begin: const Offset(-1.0, 0.0),
-                                  end: Offset.zero,
-                                ).chain(CurveTween(curve: Curves.easeInOut));
-
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
+                          Navigator.pushReplacementNamed(
+                              context, '/default-home');
                         },
                         child: Container(
                           width: 50,
@@ -67,7 +46,7 @@ class _RentalsPageState extends State<RentalsPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 110),
+                      const SizedBox(width: 100),
                       Text(
                         'Rentals',
                         style: GoogleFonts.inter(

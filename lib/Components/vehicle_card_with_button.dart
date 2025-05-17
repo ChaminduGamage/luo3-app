@@ -11,6 +11,8 @@ class VehicleCardWithButton extends StatefulWidget {
   State<VehicleCardWithButton> createState() => _VehicleCardWithButtonState();
 }
 
+bool _isBookmarked = false;
+
 class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
   @override
   Widget build(BuildContext context) {
@@ -83,12 +85,18 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.bookmark),
+                        icon: Icon(
+                          _isBookmarked
+                              ? Icons.bookmark
+                              : Icons.bookmark_border,
+                        ),
                         color: Luo3Colors.primary,
                         onPressed: () {
-                          // Handle bookmark tap
+                          setState(() {
+                            _isBookmarked = !_isBookmarked;
+                          });
                         },
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -221,7 +229,7 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       BookingButton(
-                        title: "Booking Now",
+                        title: "Book Vehicle",
                         onPressed: () {
                           // Handle booking button tap
                         },

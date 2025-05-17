@@ -9,6 +9,8 @@ class VehicleCard extends StatefulWidget {
   State<VehicleCard> createState() => _VehicleCardState();
 }
 
+bool _isBookmarked = false;
+
 class _VehicleCardState extends State<VehicleCard> {
   @override
   Widget build(BuildContext context) {
@@ -80,12 +82,18 @@ class _VehicleCardState extends State<VehicleCard> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.bookmark),
+                        icon: Icon(
+                          _isBookmarked
+                              ? Icons.bookmark
+                              : Icons.bookmark_border,
+                        ),
                         color: Luo3Colors.primary,
                         onPressed: () {
-                          // Handle bookmark tap
+                          setState(() {
+                            _isBookmarked = !_isBookmarked;
+                          });
                         },
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),

@@ -47,7 +47,9 @@ class _ChatOpenPageState extends State<ChatOpenPage> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, '/default-home');
+                    },
                     child: Container(
                       width: 45,
                       height: 45,
