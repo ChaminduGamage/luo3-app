@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:luo3_app/components/driver_card.dart';
+import 'package:luo3_app/components/driver_card_with_buttons.dart';
+import 'package:luo3_app/components/driver_hire_card.dart';
 import 'package:luo3_app/components/nav_bar.dart';
 import 'package:luo3_app/models/user_models.dart';
 import 'package:luo3_app/pages/add_new_address_page.dart';
@@ -55,6 +58,10 @@ class Luo3App extends StatelessWidget {
           '/notification': (context) => const NotificationProfileTilePage(),
           '/manage-address': (context) => const ManageAddressProfileTilePage(),
           '/add-address': (context) => const AddNewAddressPage(),
+          '/driver-card': (context) => const DriverCard(),
+          '/driver-card-with-buttons': (context) =>
+              const DriverCardWithButtons(),
+          '/driver-hire-card': (context) => const DriverHireCard(),
         },
       ),
     );
