@@ -54,9 +54,9 @@ class _EmergencyContactPageState extends State<EmergencyContactPage> {
             const SizedBox(height: 30),
 
             // Address List
-            Expanded(
+            const Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(),
               ),
             ),
