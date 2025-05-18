@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class VehicleListPage extends StatefulWidget {
@@ -11,6 +13,40 @@ class VehicleListPage extends StatefulWidget {
 }
 
 class _VehicleListPageState extends State<VehicleListPage> {
+  AuthServices _auth = AuthServices();
+  List<Map<String, dynamic>> vehicles = [];
+
+  Future<void> fetchVehicles() async {
+    try {
+      final uid = _auth.getUid();
+
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('vehicles')
+          .where('uid', isEqualTo: uid) // 🔍 filter by current user's UID
+          .get();
+
+      final allVehicles = querySnapshot.docs.map((doc) {
+        return {
+          'id': doc.id,
+          ...doc.data(),
+        };
+      }).toList();
+
+      setState(() {
+        vehicles = allVehicles;
+      });
+    } catch (e) {
+      print('Error fetching vehicles: $e');
+      // Handle error, maybe show a snackbar or message
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchVehicles(); // Fetch vehicles when widget initializes
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -58,131 +94,141 @@ class _VehicleListPageState extends State<VehicleListPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Luo3Colors.inputBackground,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(15)),
-                        boxShadow: [
-                          BoxShadow(
-                            // ignore: deprecated_member_use
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 16.0,
-                        ),
-                        child: Center(
-                          // 👈 This vertically centers everything inside the container
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .center, // Optional, default is center
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                margin: const EdgeInsets.only(right: 16),
-                                decoration: BoxDecoration(
-                                  color: Luo3Colors.textSecondary,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      // ignore: deprecated_member_use
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .center, // 👈 Vertically centers text
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Toyota Premio',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Luo3Colors.textPrimary,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Comfort Sedan',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: Luo3Colors.textSecondary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                height: 45,
-                                width: 45,
-                                margin: const EdgeInsets.all(12.0),
-                                decoration: BoxDecoration(
-                                  color: Luo3Colors.inputBackground,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(50)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      // ignore: deprecated_member_use
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  color: Colors.red,
-                                  onPressed: () {
-                                    // Handle bookmark tap
-                                  },
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(right: 16.0),
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  color: Luo3Colors.inputBackground,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(50)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      // ignore: deprecated_member_use
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  color: Luo3Colors.primary,
-                                  onPressed: () {
-                                    // Handle bookmark tap
-                                  },
-                                ),
+                    ...vehicles.map((vehicle) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Container(
+                          width: double.infinity,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            color: Luo3Colors.inputBackground,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
                               ),
                             ],
                           ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Center(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    height: 60,
+                                    margin: const EdgeInsets.only(right: 16),
+                                    decoration: BoxDecoration(
+                                      color: Luo3Colors.textSecondary,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          blurRadius: 12,
+                                          offset: const Offset(0, 6),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          vehicle['model'],
+                                          style: GoogleFonts.inter(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Luo3Colors.textPrimary,
+                                          ),
+                                        ),
+                                        Text(
+                                          vehicle['type'],
+                                          style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            color: Luo3Colors.textSecondary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 45,
+                                    width: 45,
+                                    margin: const EdgeInsets.all(16.0),
+                                    decoration: BoxDecoration(
+                                      color: Luo3Colors.inputBackground,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(50)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          blurRadius: 12,
+                                          offset: const Offset(0, 6),
+                                        ),
+                                      ],
+                                    ),
+                                    child: IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        color: Colors.red,
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text(
+                                                    "Delete Vehicle"),
+                                                content: const Text(
+                                                    "Are you sure you want to delete this vehicle?"),
+                                                actions: [
+                                                  TextButton(
+                                                    child: const Text("Cancel"),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); // Close dialog
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: const Text("Delete"),
+                                                    onPressed: () async {
+                                                      // Remove vehicle from list
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'vehicles')
+                                                          .doc(vehicle['id'])
+                                                          .delete();
+
+                                                      // Re-fetch vehicles
+                                                      fetchVehicles();
+
+                                                      Navigator.of(context)
+                                                          .pop(); // Close dialog
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
+                      );
+                    }),
+                    const SizedBox(height: 10),
                     DottedBorder(
                       color: Luo3Colors.primary,
                       strokeWidth: 1.5,
@@ -219,7 +265,7 @@ class _VehicleListPageState extends State<VehicleListPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(

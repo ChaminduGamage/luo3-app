@@ -238,7 +238,28 @@ class _VerificationPageState extends State<VerificationPage> {
                     bool success = await _auth.signInWithSmsCode(smsCode);
 
                     if (success) {
-                      Navigator.pushReplacementNamed(context, '/default-home');
+                      // Get user and check role and navigate accordingly
+                      String? role = await _auth.getUserRole();
+
+                      if (role == 'Vehicle Renter') {
+                        Navigator.pushReplacementNamed(
+                            context, '/vehicle-renter-home');
+                      } else if (role == 'Vehicle Owner') {
+                        Navigator.pushReplacementNamed(
+                            context, '/vehicle-owner-home');
+                      } else if (role == 'Vehicle Driver') {
+                        Navigator.pushReplacementNamed(
+                            context, '/vehicle-owner-home');
+                      } else if (role == 'Rental Agency') {
+                        Navigator.pushReplacementNamed(
+                            context, '/vehicle-owner-home');
+                      } else if (role == 'Repair Shop Owner') {
+                        Navigator.pushReplacementNamed(
+                            context, '/vehicle-owner-home');
+                      } else {
+                        Navigator.pushReplacementNamed(
+                            context, '/vehicle-owner-home');
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Verification failed")),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/pages/chat_page.dart';
-import 'package:luo3_app/pages/find_page.dart';
-import 'package:luo3_app/pages/home_page.dart';
-import 'package:luo3_app/pages/profile_page.dart';
-import 'package:luo3_app/pages/rentals_page.dart';
+import 'package:luo3_app/pages/renter/nav%20bar%20pages/chat_page.dart';
+import 'package:luo3_app/pages/renter/nav%20bar%20pages/find_page.dart';
+import 'package:luo3_app/pages/renter/nav%20bar%20pages/home_page.dart';
+import 'package:luo3_app/pages/renter/nav%20bar%20pages/profile_page.dart';
+import 'package:luo3_app/pages/renter/nav%20bar%20pages/rentals_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class Luo3NavBar extends StatefulWidget {

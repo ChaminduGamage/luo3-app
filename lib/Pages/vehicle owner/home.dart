@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:luo3_app/components/secondary_button.dart';
-
+import 'package:luo3_app/pages/renter/nav%20bar%20pages/profile_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class VehicleOwnerHome extends StatefulWidget {
@@ -12,44 +13,74 @@ class VehicleOwnerHome extends StatefulWidget {
 }
 
 class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
-  bool isActive = true; // Place this in your StatefulWidget's state
+  bool isActive = true;
+  late GoogleMapController _mapController;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Column(
+        body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Luo3Colors.inputBackground,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+            // Expanded Fullscreen Google Map
+            Positioned.fill(
+              child: GoogleMap(
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(6.9271, 79.8612), // Colombo
+                  zoom: 12,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
+                onMapCreated: (controller) {
+                  _mapController = controller;
+                },
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                mapType: MapType.normal,
+              ),
+            ),
+
+            // Foreground UI over the Map
+            Column(
+              children: [
+                // Top Bar with Profile Icon and Toggle
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Container(
+                    width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Luo3Colors.inputBackground,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.person,
-                            color: Luo3Colors.primary,
+                          // Profile Icon Button
+                          IconButton(
+                            icon: const Icon(
+                              Icons.person,
+                              color: Luo3Colors.primary,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfilePage(),
+                                ),
+                              );
+                            },
                           ),
-                        ],
-                      ),
-                      Row(
-                        children: [
+
+                          // Active/Inactive Toggle
                           Container(
                             height: 35,
                             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -64,8 +95,7 @@ class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
                                 Text(
                                   isActive ? 'Active' : 'Inactive',
                                   style: GoogleFonts.inter(
-                                    fontSize:
-                                        14, // Slightly smaller for compact toggle
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.white,
                                   ),
@@ -110,157 +140,151 @@ class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
                                 ),
                               ],
                             ),
-                          ),
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/vehicle-owner-home');
-                    },
-                    child: Container(
-                      width: 170,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Luo3Colors.inputBackground,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            // ignore: deprecated_member_use
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Luo3Colors.primary,
-                            ),
-                            height: 40,
-                            width: 40,
-                            child: const Icon(
-                              Icons.calendar_month,
-                              color: Luo3Colors.background,
-                              size: 20,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Pre bookings',
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Luo3Colors.textPrimary,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                '0',
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Luo3Colors.textPrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 170,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Luo3Colors.inputBackground,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          // ignore: deprecated_member_use
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/vehicle-owner-home');
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Luo3Colors.primary,
-                            ),
-                            height: 40,
-                            width: 40,
-                            child: const Icon(
-                              Icons.attach_money,
-                              color: Luo3Colors.background,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Toral Earnings',
-                              style: GoogleFonts.inter(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Luo3Colors.textPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              '0',
-                              style: GoogleFonts.inter(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Luo3Colors.textPrimary,
-                              ),
+
+                // Stat Cards
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Pre Bookings
+                      Container(
+                        width: 170,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Luo3Colors.inputBackground,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Luo3Colors.primary,
+                              ),
+                              height: 40,
+                              width: 40,
+                              child: const Icon(
+                                Icons.calendar_month,
+                                color: Luo3Colors.background,
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Pre bookings',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Luo3Colors.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  '0',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Luo3Colors.textPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Total Earnings
+                      Container(
+                        width: 170,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Luo3Colors.inputBackground,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Luo3Colors.primary,
+                              ),
+                              height: 40,
+                              width: 40,
+                              child: const Icon(
+                                Icons.attach_money,
+                                color: Luo3Colors.background,
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Total Earnings',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Luo3Colors.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  '0',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Luo3Colors.textPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: SecondaryButton(
-                name: "Vehicle List",
-                onPressed: () async {
-                  Navigator.pushNamed(context, '/vehicle-list');
-                },
-              ),
+                ),
+
+                const Spacer(),
+
+                // Vehicle List Button
+                SizedBox(
+                  width: double.infinity,
+                  child: SecondaryButton(
+                    name: "Vehicle List",
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/vehicle-list');
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

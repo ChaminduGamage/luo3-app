@@ -269,8 +269,27 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               );
                             } else {
-                              Navigator.pushReplacementNamed(
-                                  context, '/default-home');
+                              String? role = await _auth.getUserRole();
+
+                              if (role == 'Vehicle Renter') {
+                                Navigator.pushReplacementNamed(
+                                    context, '/vehicle-renter-home');
+                              } else if (role == 'Vehicle Owner') {
+                                Navigator.pushReplacementNamed(
+                                    context, '/vehicle-owner-home');
+                              } else if (role == 'Vehicle Driver') {
+                                Navigator.pushReplacementNamed(
+                                    context, '/vehicle-owner-home');
+                              } else if (role == 'Rental Agency') {
+                                Navigator.pushReplacementNamed(
+                                    context, '/vehicle-owner-home');
+                              } else if (role == 'Repair Shop Owner') {
+                                Navigator.pushReplacementNamed(
+                                    context, '/vehicle-owner-home');
+                              } else {
+                                Navigator.pushReplacementNamed(
+                                    context, '/vehicle-owner-home');
+                              }
                             }
                           }
                         },

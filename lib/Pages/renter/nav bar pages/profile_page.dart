@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/pages/bookmark_rentals_page.dart';
-import 'package:luo3_app/pages/emergency_contact.dart';
-import 'package:luo3_app/pages/manage_adress_page.dart';
-import 'package:luo3_app/pages/notification_page.dart';
-import 'package:luo3_app/pages/payment_method_page.dart';
-import 'package:luo3_app/pages/your_profile.dart';
+import 'package:luo3_app/pages/renter/profile/bookmark_rentals_page.dart';
+import 'package:luo3_app/pages/renter/profile/emergency_contact.dart';
+import 'package:luo3_app/pages/renter/profile/manage_adress_page.dart';
+import 'package:luo3_app/pages/renter/profile/notification_page.dart';
+import 'package:luo3_app/pages/renter/profile/payment_method_page.dart';
+import 'package:luo3_app/pages/renter/profile/your_profile.dart';
 import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({super.key});
@@ -208,6 +209,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 .signOut(); // Ensure _auth is an instance of AuthServices
                             // Redirect to login or home screen after logout
                             Navigator.pushReplacementNamed(context, '/login');
+
+                            // set is authenticated shared preferences as false
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setBool('isAuthenticated', false);
                           } catch (e) {
                             print("Error during logout: $e");
                           }

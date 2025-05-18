@@ -57,18 +57,29 @@ class AuthServices {
     }
   }
 
+  String? getUid() {
+    return _auth.currentUser?.uid;
+  }
+
   // Get user role after login
-  Future<String?> getUserRole(String uid) async {
+  Future<String?> getUserRole() async {
     try {
-      DocumentSnapshot doc =
-          await _firestore.collection('users').doc(uid).get();
-      if (doc.exists) {
-        return doc['role'];
-      } else {
-        return null;
+      // Get current user
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        // Get user document from Firestore
+        DocumentSnapshot userDoc =
+            await _firestore.collection('users').doc(user.uid).get();
+
+        // Return the 'role' field if it exists
+        if (userDoc.exists && userDoc.data() != null) {
+          return userDoc.get('role') as String?;
+        }
       }
+      return null;
     } catch (e) {
-      print(e.toString());
+      print('Error getting user role: $e');
       return null;
     }
   }

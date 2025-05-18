@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/secondary_button.dart';
+import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class AddVehiclePage extends StatefulWidget {
@@ -11,6 +14,7 @@ class AddVehiclePage extends StatefulWidget {
 }
 
 class _AddVehiclePageState extends State<AddVehiclePage> {
+  final AuthServices _auth = AuthServices();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _modelController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
@@ -21,6 +25,8 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
   final TextEditingController _fuelController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _freeKilometerController =
+      TextEditingController();
+  final TextEditingController _additionalPriceController =
       TextEditingController();
 
   bool? isChecked = false;
@@ -36,6 +42,34 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
     _priceController.dispose();
     _freeKilometerController.dispose();
     super.dispose();
+  }
+
+  Future<Position?> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      print('Location services are disabled.');
+      return null;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('Location permissions are denied.');
+        return null;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      print('Location permissions are permanently denied.');
+      return null;
+    }
+
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 
   @override
@@ -54,7 +88,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacementNamed(
-                              context, '/vehicle-owner-home');
+                              context, '/vehicle-list');
                         },
                         child: Container(
                           width: 50,
@@ -302,7 +336,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                             ),
                             const SizedBox(height: 8),
                             TextFormField(
-                              controller: _freeKilometerController,
+                              controller: _additionalPriceController,
                               keyboardType: TextInputType.number,
                               decoration:
                                   _inputDecoration("Example: 1000, 1500, etc."),
@@ -324,9 +358,60 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                 name: "Add Vehicle",
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Proceed with form submission logic
-                    print("All fields are valid. Ready to add vehicle.");
-                    // Add your vehicle submission logic here
+                    try {
+                      final uid = _auth.getUid();
+
+                      if (uid == null) {
+                        print("User not logged in.");
+                        return;
+                      }
+
+                      final position = await _getCurrentLocation();
+                      if (position == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text("Location not available.")),
+                        );
+                        return;
+                      }
+
+                      await FirebaseFirestore.instance
+                          .collection('vehicles')
+                          .add({
+                        'uid': uid,
+                        'model': _modelController.text.trim(),
+                        'type': _typeController.text.trim(),
+                        'vehicleNumber': _vehicleNumberController.text.trim(),
+                        'noOfPassengers':
+                            int.tryParse(_noPassengerController.text.trim()) ??
+                                0,
+                        'gearType': _gearController.text.trim(),
+                        'fuelType': _fuelController.text.trim(),
+                        'pricePerDay':
+                            double.tryParse(_priceController.text.trim()) ?? 0,
+                        'freeKilometers': _freeKilometerController.text.trim(),
+                        'additionalPricePerKm': double.tryParse(
+                                _additionalPriceController.text.trim()) ??
+                            0,
+                        'createdAt': FieldValue.serverTimestamp(),
+                        'location': {
+                          'latitude': position.latitude,
+                          'longitude': position.longitude,
+                        }
+                      });
+
+                      print("Vehicle added successfully.");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text("Vehicle added successfully!")),
+                      );
+                      Navigator.pushNamed(context, '/vehicle-list');
+                    } catch (e) {
+                      print("Error adding vehicle: $e");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Failed to add vehicle.")),
+                      );
+                    }
                   } else {
                     print("Form validation failed.");
                   }
