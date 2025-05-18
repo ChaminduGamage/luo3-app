@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:luo3_app/components/renting_card.dart';
+import 'package:luo3_app/components/vehicle_card_with_button.dart';
 import 'package:luo3_app/theme/colors.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -29,26 +33,45 @@ class _FindPageState extends State<FindPage> {
   void initState() {
     super.initState();
     _startTracking();
+    // Get all vehicle locations from the database
+    _loadVehicleLocations();
+  }
 
-    // Static markers
-    markers.addAll([
-      Marker(
-        markerId: const MarkerId('marker_1'),
-        position: const LatLng(6.9271, 79.8612),
-        infoWindow: const InfoWindow(title: 'Colombo'),
-        onTap: () {
-          _getDirections(const LatLng(6.9271, 79.8612));
-        },
-      ),
-      Marker(
-        markerId: const MarkerId('marker_2'),
-        position: const LatLng(6.032610, 80.631030),
-        infoWindow: const InfoWindow(title: 'Madakuttita Location'),
-        onTap: () {
-          _getDirections(const LatLng(6.032610, 80.631030));
-        },
-      ),
-    ]);
+  void _loadVehicleLocations() async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('vehicles').get();
+
+    final vehicles = querySnapshot.docs.map((doc) {
+      final data = doc.data();
+      data['id'] = doc.id;
+      return data;
+    }).toList();
+
+    final List<Marker> loadedMarkers = [];
+
+    for (var data in vehicles) {
+      if (data.containsKey('location')) {
+        final location = data['location'];
+        final double lat = location['latitude'];
+        final double lng = location['longitude'];
+
+        loadedMarkers.add(
+          Marker(
+            markerId: MarkerId(data['id']),
+            position: LatLng(lat, lng),
+            infoWindow: InfoWindow(title: data['model'] ?? 'Vehicle'),
+            onTap: () {
+              _getDirections(LatLng(lat, lng));
+              _onMarkerTap(data); // pass entire vehicle data here
+            },
+          ),
+        );
+      }
+    }
+
+    setState(() {
+      markers.addAll(loadedMarkers); // assuming markers is a Set<Marker>
+    });
   }
 
   Future<void> _startTracking() async {
@@ -120,6 +143,56 @@ class _FindPageState extends State<FindPage> {
     }
   }
 
+  void _onMarkerTap(Map<String, dynamic> vehicle) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        bool showRentingCard = false;
+
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return DraggableScrollableSheet(
+              expand: false,
+              initialChildSize: 0.5,
+              minChildSize: 0.3,
+              maxChildSize: 0.85,
+              builder: (context, scrollController) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: showRentingCard
+                        ? RentingCard(vehicle: vehicle) // pass vehicle here too
+                        : VehicleCardWithButton(
+                            vehicle: vehicle,
+                            onRentNow: () {
+                              setModalState(() {
+                                showRentingCard = true;
+                              });
+                            },
+                          ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _positionStream?.cancel();
@@ -137,8 +210,11 @@ class _FindPageState extends State<FindPage> {
                 target: LatLng(6.9271, 79.8612),
                 zoom: 12.0,
               ),
-              onMapCreated: (GoogleMapController controller) {
+              onMapCreated: (GoogleMapController controller) async {
                 _mapController = controller;
+                String style = await rootBundle
+                    .loadString('assets/map_styles/light_map_style.json');
+                _mapController?.setMapStyle(style);
               },
               markers: markers,
               polylines: _polylines,

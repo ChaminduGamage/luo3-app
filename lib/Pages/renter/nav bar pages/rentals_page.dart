@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/active_renting_card.dart';
@@ -13,6 +15,46 @@ class RentalsPage extends StatefulWidget {
 }
 
 class _RentalsPageState extends State<RentalsPage> {
+  List<Map<String, dynamic>> _rentRequests = [];
+  Future<List<Map<String, dynamic>>> fetchRentRequestsByCurrentUser() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        throw Exception("No user is currently signed in.");
+      }
+
+      final snapshot = await FirebaseFirestore.instance
+          .collection('rent_requests')
+          .where('userId', isEqualTo: user.uid)
+          .orderBy('requestedAt', descending: true) // Optional: sort by time
+          .get();
+
+      // Convert each document to a Map and include the document ID
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id; // Include document ID if needed
+        return data;
+      }).toList();
+    } catch (e) {
+      print("Error fetching rent requests: $e");
+      return [];
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRentRequests();
+  }
+
+  void _loadRentRequests() async {
+    final requests = await fetchRentRequestsByCurrentUser();
+    setState(() {
+      _rentRequests = requests;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -105,16 +147,20 @@ class _RentalsPageState extends State<RentalsPage> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    const Expanded(
+                    Expanded(
                       child: TabBarView(
                         children: [
-                          Center(
-                            child: ActiveRentingCard(),
+                          SingleChildScrollView(
+                            child: Column(
+                              children: _rentRequests.map((request) {
+                                return ActiveRentingCard(request: request);
+                              }).toList(),
+                            ),
                           ),
-                          Center(
+                          const Center(
                             child: CompleteRentignCard(),
                           ),
-                          Center(
+                          const Center(
                             child: BookingRentingCard(),
                           ),
                         ],

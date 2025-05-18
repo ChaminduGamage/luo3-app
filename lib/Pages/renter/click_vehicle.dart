@@ -92,7 +92,7 @@ class _ClickVehiclesState extends State<ClickVehicles> {
               ),
             ),
             const Spacer(),
-            const VehicleCardWithButton(),
+            // const VehicleCardWithButton(),
           ],
         ),
       ),

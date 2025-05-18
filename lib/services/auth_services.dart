@@ -172,4 +172,20 @@ class AuthServices {
 
   // Check if user is logged in
   User? get currentUser => _auth.currentUser;
+
+  Future<String?> getUserName() async {
+    try {
+      final String uid = _auth.currentUser!.uid;
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(uid).get();
+      if (doc.exists) {
+        return doc['fullName'];
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching phone number: ${e.toString()}');
+      return null;
+    }
+  }
 }

@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/booking_button.dart';
 import 'package:luo3_app/components/rent_button.dart';
+import 'package:luo3_app/pages/renter/rent_requesting_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class RentingCard extends StatefulWidget {
-  const RentingCard({super.key});
+  final Map<String, dynamic> vehicle;
+  const RentingCard({
+    super.key,
+    required this.vehicle,
+  });
 
   @override
   State<RentingCard> createState() => _RentingCardState();
@@ -19,22 +24,10 @@ class _RentingCardState extends State<RentingCard> {
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: Luo3Colors.inputBackground,
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
-              boxShadow: [
-                BoxShadow(
-                  // ignore: deprecated_member_use
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -91,7 +84,7 @@ class _RentingCardState extends State<RentingCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Toyota Premio',
+                              widget.vehicle['model'],
                               style: GoogleFonts.inter(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -99,7 +92,7 @@ class _RentingCardState extends State<RentingCard> {
                               ),
                             ),
                             Text(
-                              'Comfort Sedan',
+                              widget.vehicle['type'],
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -116,7 +109,8 @@ class _RentingCardState extends State<RentingCard> {
                             children: [
                               Text.rich(
                                 TextSpan(
-                                  text: 'Rs.3000',
+                                  text:
+                                      widget.vehicle['pricePerDay'].toString(),
                                   style: GoogleFonts.inter(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
@@ -137,7 +131,7 @@ class _RentingCardState extends State<RentingCard> {
                             ],
                           ),
                           Text(
-                            'GR 6456',
+                            widget.vehicle['vehicleNumber'],
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -194,7 +188,13 @@ class _RentingCardState extends State<RentingCard> {
                       RentButton(
                           title: "Request Rent",
                           onPressed: () {
-                            // Handle rent button tap
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RentRequestingPage(
+                                      vehicleData: widget.vehicle,
+                                      days: _selectedRentalDays)),
+                            );
                           }),
                     ],
                   )

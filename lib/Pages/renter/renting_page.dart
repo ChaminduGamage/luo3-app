@@ -80,7 +80,7 @@ class _RentingPageState extends State<RentingPage> {
                 ],
               ),
             ),
-            const RentingCard(),
+            // const RentingCard(),
           ],
         ),
       ),

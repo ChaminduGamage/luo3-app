@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:luo3_app/components/secondary_button.dart';
-import 'package:luo3_app/pages/renter/nav%20bar%20pages/profile_page.dart';
+
+import 'package:luo3_app/pages/vehicle%20owner/owner_profile.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class VehicleOwnerHome extends StatefulWidget {
@@ -14,7 +17,61 @@ class VehicleOwnerHome extends StatefulWidget {
 
 class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
   bool isActive = true;
-  late GoogleMapController _mapController;
+
+  GoogleMapController? _mapController;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusCurrentLocation(); // Call on init
+  }
+
+  void _onMapCreated(GoogleMapController controller) async {
+    _mapController = controller;
+    String style =
+        await rootBundle.loadString('assets/map_styles/light_map_style.json');
+    _mapController?.setMapStyle(style);
+    _focusCurrentLocation();
+  }
+
+  Future<void> _focusCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      print('Location services are disabled.');
+      return;
+    }
+
+    // Check permission
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('Location permission denied');
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      print('Location permission permanently denied');
+      return;
+    }
+
+    // Get current position
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    // Move camera
+    _mapController?.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 13,
+      ),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +82,11 @@ class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
             // Expanded Fullscreen Google Map
             Positioned.fill(
               child: GoogleMap(
+                onMapCreated: _onMapCreated,
                 initialCameraPosition: const CameraPosition(
                   target: LatLng(6.9271, 79.8612), // Colombo
-                  zoom: 12,
+                  zoom: 13,
                 ),
-                onMapCreated: (controller) {
-                  _mapController = controller;
-                },
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
                 mapType: MapType.normal,
@@ -74,7 +129,7 @@ class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ProfilePage(),
+                                  builder: (context) => OwnerProfilePage(),
                                 ),
                               );
                             },

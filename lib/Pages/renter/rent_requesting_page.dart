@@ -1,17 +1,45 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/nav_bar.dart';
 import 'package:luo3_app/components/secondary_button.dart';
+import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class RentRequestingPage extends StatefulWidget {
-  const RentRequestingPage({super.key});
+  final Map<String, dynamic> vehicleData;
+  final String? days;
+  const RentRequestingPage({super.key, required this.vehicleData, this.days});
 
   @override
   State<RentRequestingPage> createState() => _RentRequestingPageState();
 }
 
 class _RentRequestingPageState extends State<RentRequestingPage> {
+  final AuthServices _auth = AuthServices();
+  @override
+  void initState() {
+    super.initState();
+    _createRentRequest();
+  }
+
+  void _createRentRequest() async {
+    String? uid = _auth.getUid();
+    final request = {
+      'vehicleId': widget.vehicleData['id'],
+      'model': widget.vehicleData['model'],
+      'pricePerDay': widget.vehicleData['pricePerDay'],
+      'type': widget.vehicleData['type'],
+      'vehicleNumber': widget.vehicleData['vehicleNumber'],
+      'days': widget.days,
+      'userId': uid,
+      'status': 'pending',
+      'requestedAt': FieldValue.serverTimestamp(),
+    };
+
+    await FirebaseFirestore.instance.collection('rent_requests').add(request);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

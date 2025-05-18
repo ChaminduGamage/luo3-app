@@ -5,7 +5,13 @@ import 'package:luo3_app/components/rent_button.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class VehicleCardWithButton extends StatefulWidget {
-  const VehicleCardWithButton({super.key});
+  final Map<String, dynamic> vehicle;
+  final VoidCallback? onRentNow;
+  const VehicleCardWithButton({
+    super.key,
+    required this.vehicle,
+    this.onRentNow,
+  });
 
   @override
   State<VehicleCardWithButton> createState() => _VehicleCardWithButtonState();
@@ -20,22 +26,10 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: Luo3Colors.inputBackground,
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
-              boxShadow: [
-                BoxShadow(
-                  // ignore: deprecated_member_use
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -66,7 +60,7 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Toyota Premio',
+                              widget.vehicle['model'],
                               style: GoogleFonts.inter(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -74,7 +68,7 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                               ),
                             ),
                             Text(
-                              'Comfort Sedan',
+                              widget.vehicle['type'],
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -117,11 +111,11 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      _specChip('19 KM per Litre'),
+                      _specChip(widget.vehicle['fuelType']),
                       const SizedBox(width: 5),
-                      _specChip('Manual Gear'),
+                      _specChip(widget.vehicle['gearType']),
                       const SizedBox(width: 5),
-                      _specChip('4 Seater'),
+                      _specChip('${widget.vehicle['noOfPassengers']}-Seats'),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -204,7 +198,7 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                       const Spacer(),
                       Text.rich(
                         TextSpan(
-                          text: 'Rs.3000',
+                          text: widget.vehicle['pricePerDay'].toString(),
                           style: GoogleFonts.inter(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -234,12 +228,9 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                           // Handle booking button tap
                         },
                       ),
-                      const SizedBox(width: 10),
                       RentButton(
                           title: "Rent Now",
-                          onPressed: () {
-                            // Handle rent button tap
-                          }),
+                          onPressed: widget.onRentNow ?? () {}),
                     ],
                   )
                 ],

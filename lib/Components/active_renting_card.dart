@@ -3,9 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/booking_button.dart';
 import 'package:luo3_app/components/rent_button.dart';
 import 'package:luo3_app/theme/colors.dart';
+import 'package:intl/intl.dart';
 
 class ActiveRentingCard extends StatefulWidget {
-  const ActiveRentingCard({super.key});
+  final Map<String, dynamic> request;
+  const ActiveRentingCard({super.key, required this.request});
 
   @override
   State<ActiveRentingCard> createState() => _ActiveRentingCardState();
@@ -49,7 +51,7 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                         ),
                       ),
                       Text(
-                        'For 3 days',
+                        'For ${widget.request['days']} days',
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -90,7 +92,7 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Toyota Premio',
+                              widget.request['model'],
                               style: GoogleFonts.inter(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -98,7 +100,7 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                               ),
                             ),
                             Text(
-                              'Comfort Sedan',
+                              widget.request['type'],
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -115,7 +117,8 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                             children: [
                               Text.rich(
                                 TextSpan(
-                                  text: 'Rs.3000',
+                                  text:
+                                      'Rs.${widget.request['pricePerDay'].toString()}',
                                   style: GoogleFonts.inter(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
@@ -136,7 +139,7 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                             ],
                           ),
                           Text(
-                            'GR 6456',
+                            widget.request['vehicleNumber'],
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -148,10 +151,10 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Icon(Icons.social_distance,
                               color: Luo3Colors.primary),
@@ -166,12 +169,12 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                           ),
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Icon(Icons.date_range, color: Luo3Colors.primary),
                           SizedBox(width: 5),
                           Text(
-                            'Day 4',
+                            'Day 1',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -182,11 +185,12 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                       ),
                       Row(
                         children: [
-                          Icon(Icons.attach_money, color: Luo3Colors.primary),
-                          SizedBox(width: 5),
+                          const Icon(Icons.attach_money,
+                              color: Luo3Colors.primary),
+                          const SizedBox(width: 5),
                           Text(
-                            'Rs. 3000',
-                            style: TextStyle(
+                            'Rs. ${widget.request['pricePerDay']}',
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: Luo3Colors.textPrimary,
@@ -197,11 +201,11 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Date of Rent',
+                      const Text(
+                        'Date of Rent:',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -209,8 +213,9 @@ class _ActiveRentingCardState extends State<ActiveRentingCard> {
                         ),
                       ),
                       Text(
-                        'December 12, 2023',
-                        style: TextStyle(
+                        DateFormat.yMMMMd()
+                            .format(widget.request['requestedAt'].toDate()),
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                           color: Luo3Colors.textPrimary,
