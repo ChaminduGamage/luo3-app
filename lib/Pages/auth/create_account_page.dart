@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:luo3_app/pages/auth/profile_complete_page.dart';
+import 'package:luo3_app/pages/auth/verification_page.dart';
 import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -255,8 +257,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               await prefs.setBool(
                                   'hasCompletedOnboarding', true);
 
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  '/profile-complete', (route) => false);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileCompletePage(
+                                      role: widget.selectedRole),
+                                ),
+                              );
                             }
                           }
                         },

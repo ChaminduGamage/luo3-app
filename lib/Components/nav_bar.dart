@@ -8,11 +8,11 @@ import 'package:luo3_app/pages/renter/nav%20bar%20pages/rentals_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class Luo3NavBar extends StatefulWidget {
-  const Luo3NavBar({super.key});
+  final int? currentIndex;
+  const Luo3NavBar({super.key, this.currentIndex = 0});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _Luo3NavBarState createState() => _Luo3NavBarState();
+  State<Luo3NavBar> createState() => _Luo3NavBarState();
 }
 
 class _Luo3NavBarState extends State<Luo3NavBar> {
@@ -45,6 +45,12 @@ class _Luo3NavBarState extends State<Luo3NavBar> {
     'Chat',
     'Profile',
   ];
+
+  @override
+  void initState() {
+    _currentIndex = widget.currentIndex ?? 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

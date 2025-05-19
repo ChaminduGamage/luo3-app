@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class VerificationPage extends StatefulWidget {
-  const VerificationPage({super.key});
+  final String role;
+  const VerificationPage({super.key, required this.role});
 
   @override
   State<VerificationPage> createState() => _VerificationPageState();
@@ -15,6 +17,7 @@ class _VerificationPageState extends State<VerificationPage> {
   final List<TextEditingController> _controllers =
       List.generate(6, (index) => TextEditingController());
   final AuthServices _auth = AuthServices();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void _handleFocusChange() {
     setState(() {}); // Triggers UI update when focus changes
@@ -238,22 +241,19 @@ class _VerificationPageState extends State<VerificationPage> {
                     bool success = await _auth.signInWithSmsCode(smsCode);
 
                     if (success) {
-                      // Get user and check role and navigate accordingly
-                      String? role = await _auth.getUserRole();
-
-                      if (role == 'Vehicle Renter') {
+                      if (widget.role == 'Vehicle Renter') {
                         Navigator.pushReplacementNamed(
                             context, '/vehicle-renter-home');
-                      } else if (role == 'Vehicle Owner') {
+                      } else if (widget.role == 'Vehicle Owner') {
                         Navigator.pushReplacementNamed(
                             context, '/vehicle-owner-home');
-                      } else if (role == 'Vehicle Driver') {
+                      } else if (widget.role == 'Vehicle Driver') {
+                        Navigator.pushReplacementNamed(
+                            context, '/vehicle-driver-home');
+                      } else if (widget.role == 'Rental Agency') {
                         Navigator.pushReplacementNamed(
                             context, '/vehicle-owner-home');
-                      } else if (role == 'Rental Agency') {
-                        Navigator.pushReplacementNamed(
-                            context, '/vehicle-owner-home');
-                      } else if (role == 'Repair Shop Owner') {
+                      } else if (widget.role == 'Repair Shop Owner') {
                         Navigator.pushReplacementNamed(
                             context, '/vehicle-owner-home');
                       } else {

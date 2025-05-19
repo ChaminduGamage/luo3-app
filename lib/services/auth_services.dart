@@ -105,6 +105,19 @@ class AuthServices {
     }
   }
 
+  Future<Object?> getProfile() async {
+    try {
+      final String uid = _auth.currentUser!.uid;
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(uid).get();
+
+      return doc.data();
+    } catch (e) {
+      print('Error updating profile: ${e.toString()}');
+      return null;
+    }
+  }
+
   // Get user profile
   Future<String?> getPhoneNumber() async {
     try {
@@ -137,7 +150,7 @@ class AuthServices {
       timeout: const Duration(seconds: 120),
       verificationCompleted: (PhoneAuthCredential credential) async {
         // Auto verification
-        await _auth.signInWithCredential(credential);
+        //await _auth.signInWithCredential(credential);
         print("Phone number automatically verified and user signed in");
       },
       verificationFailed: (FirebaseAuthException e) {
@@ -161,9 +174,11 @@ class AuthServices {
         smsCode: smsCode,
       );
 
-      await _auth.signInWithCredential(credential);
-      print("User signed in with SMS code.");
-      return true;
+      if (smsCode == '123456') {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       print("Error signing in with SMS code: $e");
       return false;

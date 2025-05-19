@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/components/nav_bar.dart';
-
 import 'package:luo3_app/theme/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrinkingModePage extends StatefulWidget {
   const DrinkingModePage({super.key});
@@ -13,7 +15,62 @@ class DrinkingModePage extends StatefulWidget {
 }
 
 class _DrinkingModePageState extends State<DrinkingModePage> {
+  List<Map<String, dynamic>> _bookings = [];
   bool isDrinkingModeOn = true;
+
+  Future<List<Map<String, dynamic>>> fetchBookings() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        throw Exception("No user is currently signed in.");
+      }
+
+      final snapshot = await FirebaseFirestore.instance
+          .collection('bookings')
+          .where('userId', isEqualTo: user.uid)
+          .orderBy('timestamp', descending: true) // Optional: sort by time
+          .get();
+
+      print(snapshot);
+
+      // Convert each document to a Map and include the document ID
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id; // Include document ID if needed
+        return data;
+      }).toList();
+    } catch (e) {
+      print("Error fetching rent requests: $e");
+      return [];
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBookings();
+  }
+
+  void _loadBookings() async {
+    final bookings = await fetchBookings();
+    setState(() {
+      _bookings = bookings;
+    });
+  }
+
+  void launchDialPad(String phoneNumber) async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(
+        phoneUri,
+        mode: LaunchMode.externalApplication, // Required for Android
+      );
+    } else {
+      debugPrint('Could not launch dial pad');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -281,128 +338,152 @@ class _DrinkingModePageState extends State<DrinkingModePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Luo3Colors.inputBackground,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(15)),
-                        boxShadow: [
-                          BoxShadow(
-                            // ignore: deprecated_member_use
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 16.0,
-                        ),
-                        child: Center(
-                          // 👈 This vertically centers everything inside the container
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .center, // Optional, default is center
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                margin: const EdgeInsets.only(right: 16),
-                                decoration: BoxDecoration(
-                                  color: Luo3Colors.textSecondary,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      // ignore: deprecated_member_use
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
+                    SingleChildScrollView(
+                      child: Column(
+                        children: _bookings.map((booking) {
+                          return Container(
+                            width: double.infinity,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: Luo3Colors.inputBackground,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(15)),
+                              boxShadow: [
+                                BoxShadow(
+                                  // ignore: deprecated_member_use
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 6),
                                 ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                left: 16.0,
                               ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .center, // 👈 Vertically centers text
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Center(
+                                // 👈 This vertically centers everything inside the container
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center, // Optional, default is center
                                   children: [
-                                    Text(
-                                      'Driver Name',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Luo3Colors.textPrimary,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Driver Location',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
+                                    Container(
+                                      width: 60,
+                                      height: 60,
+                                      margin: const EdgeInsets.only(right: 16),
+                                      decoration: BoxDecoration(
                                         color: Luo3Colors.textSecondary,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            // ignore: deprecated_member_use
+                                            color:
+                                                Colors.black.withOpacity(0.1),
+                                            blurRadius: 12,
+                                            offset: const Offset(0, 6),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center, // 👈 Vertically centers text
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            booking['driver']['fullName'] ??
+                                                'Driver',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              color: Luo3Colors.textPrimary,
+                                            ),
+                                          ),
+                                          Text(
+                                            booking["driver"]['phoneNumber'] ??
+                                                "Phone Number",
+                                            style: GoogleFonts.inter(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: Luo3Colors.textSecondary,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 45,
+                                      width: 45,
+                                      margin: const EdgeInsets.all(12.0),
+                                      decoration: BoxDecoration(
+                                        color: Luo3Colors.inputBackground,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(50)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            // ignore: deprecated_member_use
+                                            color:
+                                                Colors.black.withOpacity(0.1),
+                                            blurRadius: 12,
+                                            offset: const Offset(0, 6),
+                                          ),
+                                        ],
+                                      ),
+                                      child: IconButton(
+                                        icon: const Icon(Icons.message),
+                                        color: Luo3Colors.primary,
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Luo3NavBar(
+                                                currentIndex: 3,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    Container(
+                                      margin:
+                                          const EdgeInsets.only(right: 16.0),
+                                      height: 45,
+                                      width: 45,
+                                      decoration: BoxDecoration(
+                                        color: Luo3Colors.inputBackground,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(50)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            // ignore: deprecated_member_use
+                                            color:
+                                                Colors.black.withOpacity(0.1),
+                                            blurRadius: 12,
+                                            offset: const Offset(0, 6),
+                                          ),
+                                        ],
+                                      ),
+                                      child: IconButton(
+                                        icon: const Icon(Icons.call),
+                                        color: Luo3Colors.primary,
+                                        onPressed: () {
+                                          // Handle bookmark tap
+                                          launchDialPad(booking['driver']
+                                                  ['phoneNumber'] ??
+                                              '+94772901677');
+                                        },
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Container(
-                                height: 45,
-                                width: 45,
-                                margin: const EdgeInsets.all(12.0),
-                                decoration: BoxDecoration(
-                                  color: Luo3Colors.inputBackground,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(50)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      // ignore: deprecated_member_use
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(Icons.message),
-                                  color: Luo3Colors.primary,
-                                  onPressed: () {
-                                    // Handle bookmark tap
-                                  },
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(right: 16.0),
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  color: Luo3Colors.inputBackground,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(50)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      // ignore: deprecated_member_use
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(Icons.call),
-                                  color: Luo3Colors.primary,
-                                  onPressed: () {
-                                    // Handle bookmark tap
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -414,9 +495,14 @@ class _DrinkingModePageState extends State<DrinkingModePage> {
                       radius: const Radius.circular(15),
                       child: InkWell(
                         onTap: () {
-                          // Add your navigation or modal logic here
-                          // ignore: avoid_print
-                          print("Add new driver tapped");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Luo3NavBar(
+                                currentIndex: 1,
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           width: double.infinity,

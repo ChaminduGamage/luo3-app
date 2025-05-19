@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/booking_button.dart';
-import 'package:luo3_app/components/rent_button.dart';
+import 'package:luo3_app/components/buttons/bokking_button_for_card.dart';
+import 'package:luo3_app/components/buttons/renting_button_for_map_card.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class DriverHireCard extends StatefulWidget {
-  const DriverHireCard({super.key});
+  final Map<String, dynamic> driver;
+  const DriverHireCard({super.key, required this.driver});
 
   @override
   State<DriverHireCard> createState() => _DriverHireCardState();
@@ -17,23 +19,11 @@ class _DriverHireCardState extends State<DriverHireCard> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: Luo3Colors.inputBackground,
-                borderRadius: const BorderRadius.all(Radius.circular(15)),
-                boxShadow: [
-                  BoxShadow(
-                    // ignore: deprecated_member_use
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -185,17 +175,31 @@ class _DriverHireCardState extends State<DriverHireCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        BookingButton(
+                        BookingButtonForMapCard(
                           title: "Cancel",
                           onPressed: () {
                             // Handle booking button tap
                           },
                         ),
-                        const SizedBox(width: 10),
-                        RentButton(
+                        RentButtonForMapCard(
                             title: "Hire Driver",
-                            onPressed: () {
-                              // Handle rent button tap
+                            onPressed: () async {
+                              try {
+                                // 1. Get the driver ID
+                                final driverId = widget.driver['userId'];
+
+                                // 2. Update Firestore (or your database)
+                                await FirebaseFirestore.instance
+                                    .collection('drivers')
+                                    .doc(driverId)
+                                    .update({'isBooked': true});
+
+                                // 3. Close the modal
+                                Navigator.pop(context);
+                              } catch (e) {
+                                // Optional: handle error (e.g., show Snackbar or Alert)
+                                print("Error updating booking status: $e");
+                              }
                             }),
                       ],
                     )

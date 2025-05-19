@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:luo3_app/pages/onboarding/onboarding_first_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 import 'package:luo3_app/components/custom_clipper.dart';
-import 'package:luo3_app/components/primary_button.dart';
+import 'package:luo3_app/components/buttons/primary_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatelessWidget {

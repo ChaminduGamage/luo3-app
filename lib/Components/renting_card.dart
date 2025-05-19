@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/booking_button.dart';
-import 'package:luo3_app/components/rent_button.dart';
+import 'package:luo3_app/components/buttons/booking_button.dart';
+import 'package:luo3_app/components/buttons/bokking_button_for_card.dart';
+import 'package:luo3_app/components/buttons/renting_button_for_map_card.dart';
+import 'package:luo3_app/components/buttons/rent_button.dart';
 import 'package:luo3_app/pages/renter/rent_requesting_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -178,14 +180,13 @@ class _RentingCardState extends State<RentingCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      BookingButton(
+                      BookingButtonForMapCard(
                         title: "Cancel",
                         onPressed: () {
                           // Handle booking button tap
                         },
                       ),
-                      const SizedBox(width: 10),
-                      RentButton(
+                      RentButtonForMapCard(
                           title: "Request Rent",
                           onPressed: () {
                             Navigator.push(

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/secondary_button.dart';
+import 'package:luo3_app/components/buttons/secondary_button.dart';
+import 'package:luo3_app/pages/auth/verification_page.dart';
 import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class ProfileCompletePage extends StatefulWidget {
-  const ProfileCompletePage({super.key});
+  final String role;
+  const ProfileCompletePage({super.key, required this.role});
 
   @override
   State<ProfileCompletePage> createState() => _ProfileCompletePageState();
@@ -224,8 +226,13 @@ class _ProfileCompletePageState extends State<ProfileCompletePage> {
                       age: int.parse(_ageController.text),
                     );
 
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/verification', (route) => false);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            VerificationPage(role: widget.role),
+                      ),
+                    );
                   }
                 },
               ),

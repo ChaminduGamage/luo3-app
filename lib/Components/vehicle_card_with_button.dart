@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/booking_button.dart';
-import 'package:luo3_app/components/rent_button.dart';
+import 'package:luo3_app/components/buttons/bokking_button_for_card.dart';
+import 'package:luo3_app/components/buttons/renting_button_for_map_card.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class VehicleCardWithButton extends StatefulWidget {
@@ -222,13 +222,13 @@ class _VehicleCardWithButtonState extends State<VehicleCardWithButton> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      BookingButton(
+                      BookingButtonForMapCard(
                         title: "Book Vehicle",
                         onPressed: () {
                           // Handle booking button tap
                         },
                       ),
-                      RentButton(
+                      RentButtonForMapCard(
                           title: "Rent Now",
                           onPressed: widget.onRentNow ?? () {}),
                     ],

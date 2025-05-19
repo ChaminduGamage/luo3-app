@@ -56,6 +56,10 @@ class _VehicleCardState extends State<VehicleCard> {
                             ),
                           ],
                         ),
+                        child: const Icon(
+                          Icons.car_rental,
+                          color: Luo3Colors.inputBackground,
+                        ),
                       ),
                       Expanded(
                         child: Column(

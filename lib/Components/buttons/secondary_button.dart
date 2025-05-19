@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luo3_app/components/primary_button.dart';
+import 'package:luo3_app/components/buttons/primary_button.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class SecondaryButton extends StatefulWidget {

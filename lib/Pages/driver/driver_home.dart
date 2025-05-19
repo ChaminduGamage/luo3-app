@@ -1,29 +1,61 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:luo3_app/components/buttons/secondary_button.dart';
-import 'package:luo3_app/pages/vehicle%20owner/owner_profile.dart';
+import 'package:luo3_app/pages/driver/driver_profile.dart';
+import 'package:luo3_app/services/auth_services.dart';
+import 'package:luo3_app/services/location_service.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:luo3_app/theme/colors.dart';
 
-class VehicleOwnerHome extends StatefulWidget {
-  const VehicleOwnerHome({super.key});
+class DriverHomePage extends StatefulWidget {
+  const DriverHomePage({super.key});
 
   @override
-  State<VehicleOwnerHome> createState() => _VehicleOwnerHomeState();
+  State<DriverHomePage> createState() => _DriverHomePageState();
 }
 
-class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
-  bool isActive = true;
-
-  GoogleMapController? _mapController;
+class _DriverHomePageState extends State<DriverHomePage> {
+  final AuthServices _auth = AuthServices();
+  final LocationService _locationService = LocationService();
+  bool isBooked = false;
 
   @override
   void initState() {
     super.initState();
-    _focusCurrentLocation(); // Call on init
+    _startTrackingLocation();
+    _focusCurrentLocation();
+    _fetchBookingStatus();
   }
+
+  Future<void> _fetchBookingStatus() async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(_auth.getUid())
+          .get();
+
+      setState(() {
+        isBooked = snapshot['isBooked'] ?? false;
+      });
+    } catch (e) {
+      print('Error fetching booking status: $e');
+    }
+  }
+
+  void _startTrackingLocation() async {
+    try {
+      await _locationService.setCurrentLocation();
+    } catch (e) {
+      print('Error starting location tracking: $e');
+    }
+  }
+
+  bool isActive = true;
+
+  GoogleMapController? _mapController;
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
@@ -128,7 +160,7 @@ class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => OwnerProfilePage(),
+                                  builder: (context) => DriverProfilePage(),
                                 ),
                               );
                             },
@@ -252,7 +284,7 @@ class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  '0',
+                                  isBooked ? "Booked" : "None",
                                   style: GoogleFonts.inter(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -325,16 +357,15 @@ class _VehicleOwnerHomeState extends State<VehicleOwnerHome> {
                     ],
                   ),
                 ),
-
                 const Spacer(),
 
                 // Vehicle List Button
                 SizedBox(
                   width: double.infinity,
                   child: SecondaryButton(
-                    name: "Vehicle List",
+                    name: "Update Location",
                     onPressed: () {
-                      Navigator.pushNamed(context, '/vehicle-list');
+                      _startTrackingLocation();
                     },
                   ),
                 ),

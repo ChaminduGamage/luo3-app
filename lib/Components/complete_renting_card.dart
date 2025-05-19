@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/booking_button.dart';
-import 'package:luo3_app/components/rent_button.dart';
+import 'package:luo3_app/components/buttons/booking_button.dart';
+import 'package:luo3_app/components/buttons/rent_button.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class CompleteRentignCard extends StatefulWidget {

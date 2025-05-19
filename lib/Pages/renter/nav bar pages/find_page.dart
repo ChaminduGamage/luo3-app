@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:luo3_app/components/driver_card_with_buttons.dart';
+import 'package:luo3_app/components/driver_hire_card.dart';
 import 'package:luo3_app/components/renting_card.dart';
 import 'package:luo3_app/components/vehicle_card_with_button.dart';
 import 'package:luo3_app/theme/colors.dart';
@@ -33,8 +35,96 @@ class _FindPageState extends State<FindPage> {
   void initState() {
     super.initState();
     _startTracking();
-    // Get all vehicle locations from the database
     _loadVehicleLocations();
+    selectedCardIndex = 0;
+  }
+
+  void _loadDriverLocations() async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('drivers').get();
+
+    final drivers = querySnapshot.docs.map((doc) {
+      final data = doc.data();
+      data['id'] = doc.id;
+      return data;
+    }).toList();
+
+    final List<Marker> driverMarkers = [];
+
+    for (var data in drivers) {
+      if (data.containsKey('latitude') && data.containsKey('longitude')) {
+        final double lat = data['latitude'];
+        final double lng = data['longitude'];
+        final String driverId = data['id'];
+        final String name = data['user']?['fullName'] ?? 'Driver';
+
+        driverMarkers.add(
+          Marker(
+              markerId: MarkerId('driver_$driverId'),
+              position: LatLng(lat, lng),
+              infoWindow: InfoWindow(title: name),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueAzure),
+              onTap: () {
+                _onDriverTap(data); // Pass entire driver data here
+              }),
+        );
+      }
+    }
+
+    setState(() {
+      markers.addAll(driverMarkers); // Combine with vehicle markers
+    });
+  }
+
+  void _onDriverTap(Map<String, dynamic> driver) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        bool showBookingCard = false;
+
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return DraggableScrollableSheet(
+              expand: false,
+              initialChildSize: 0.5,
+              minChildSize: 0.3,
+              maxChildSize: 0.85,
+              builder: (context, scrollController) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: showBookingCard
+                        ? DriverHireCard(driver: driver)
+                        : DriverCardWithButtons(
+                            driver: driver,
+                            onHireNow: () {
+                              setModalState(() {
+                                showBookingCard = true;
+                              });
+                            },
+                          ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   void _loadVehicleLocations() async {
@@ -363,6 +453,17 @@ class _FindPageState extends State<FindPage> {
                                     onTap: () {
                                       setState(() {
                                         selectedCardIndex = index;
+                                        markers.clear();
+                                        _polylines
+                                            .clear(); // optional: clear route on new selection
+
+                                        if (index == 0) {
+                                          _loadVehicleLocations();
+                                        } else if (index == 1) {
+                                          _loadDriverLocations();
+                                        } else {
+                                          // You can add for agencies and repair shops similarly
+                                        }
                                       });
                                     },
                                     child: Container(

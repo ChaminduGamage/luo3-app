@@ -1,11 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/booking_button.dart';
-import 'package:luo3_app/components/rent_button.dart';
+import 'package:luo3_app/components/buttons/bokking_button_for_card.dart';
+import 'package:luo3_app/components/buttons/renting_button_for_map_card.dart';
+import 'package:luo3_app/services/auth_services.dart';
 import 'package:luo3_app/theme/colors.dart';
 
 class DriverCardWithButtons extends StatefulWidget {
-  const DriverCardWithButtons({super.key});
+  final Map<String, dynamic> driver;
+  final VoidCallback onHireNow;
+  const DriverCardWithButtons(
+      {super.key, required this.driver, required this.onHireNow});
 
   @override
   State<DriverCardWithButtons> createState() => _DriverCardWithButtonsState();
@@ -14,6 +19,7 @@ class DriverCardWithButtons extends StatefulWidget {
 bool _isBookmarked = false;
 
 class _DriverCardWithButtonsState extends State<DriverCardWithButtons> {
+  final AuthServices _auth = AuthServices();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,22 +27,10 @@ class _DriverCardWithButtonsState extends State<DriverCardWithButtons> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: Luo3Colors.inputBackground,
-                borderRadius: const BorderRadius.all(Radius.circular(15)),
-                boxShadow: [
-                  BoxShadow(
-                    // ignore: deprecated_member_use
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -67,7 +61,8 @@ class _DriverCardWithButtonsState extends State<DriverCardWithButtons> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Driver Name',
+                                widget.driver['user']['fullName'] ??
+                                    'Driver Name',
                                 style: GoogleFonts.inter(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -75,7 +70,8 @@ class _DriverCardWithButtonsState extends State<DriverCardWithButtons> {
                                 ),
                               ),
                               Text(
-                                'Driver ID',
+                                widget.driver['user']['email'] ??
+                                    'Driver Phone Number',
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
@@ -119,11 +115,11 @@ class _DriverCardWithButtonsState extends State<DriverCardWithButtons> {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        _specChip('Driving License'),
+                        _specChip('Age ${widget.driver['user']['age']}' ??
+                            'Driver age'),
                         const SizedBox(width: 5),
-                        _specChip('Experience'),
-                        const SizedBox(width: 5),
-                        _specChip('Vehicle Type'),
+                        _specChip(widget.driver['user']['phoneNumber'] ??
+                            'Driver Phone Number'),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -230,17 +226,41 @@ class _DriverCardWithButtonsState extends State<DriverCardWithButtons> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        BookingButton(
-                          title: "Book Now",
-                          onPressed: () {
-                            // Handle booking button tap
-                          },
-                        ),
-                        const SizedBox(width: 10),
-                        RentButton(
+                        BookingButtonForMapCard(
+                            title: "Assign Drink Mode",
+                            onPressed: () async {
+                              try {
+                                String? userId = _auth.getUid();
+
+                                Map<String, dynamic> driverData = {
+                                  'userId': userId,
+                                  'driver': widget.driver['user'],
+                                  'timestamp': FieldValue.serverTimestamp(),
+                                };
+
+                                // 3. Save to Firestore
+                                await FirebaseFirestore.instance
+                                    .collection('bookings')
+                                    .doc(userId)
+                                    .set(driverData);
+
+                                print("Driver booking data saved!");
+                                Navigator.pop(context);
+
+                                // Optional: show success UI
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text('Driver booked successfully!')),
+                                );
+                              } catch (e) {
+                                print("Error booking driver: $e");
+                              }
+                            }),
+                        RentButtonForMapCard(
                             title: "Hire Driver",
                             onPressed: () {
-                              // Handle rent button tap
+                              widget.onHireNow();
                             }),
                       ],
                     )

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/secondary_button.dart';
+import 'package:luo3_app/components/buttons/secondary_button.dart';
 import 'package:luo3_app/pages/auth/profile_complete_page.dart';
 import 'package:luo3_app/theme/colors.dart';
 
@@ -33,7 +33,9 @@ class _DrivingLicensePageState extends State<DrivingLicensePage> {
                                   const Duration(milliseconds: 700),
                               pageBuilder:
                                   (context, animation, secondaryAnimation) =>
-                                      const ProfileCompletePage(),
+                                      const ProfileCompletePage(
+                                role: '',
+                              ),
                               transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) {
                                 var tween = Tween(

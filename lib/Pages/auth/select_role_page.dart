@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:luo3_app/components/secondary_button.dart';
+import 'package:luo3_app/components/buttons/secondary_button.dart';
 import 'package:luo3_app/components/select_role_field.dart';
 import 'package:luo3_app/pages/auth/create_account_page.dart';
 import 'package:luo3_app/pages/onboarding/onboarding_third_page.dart';

@@ -2,13 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:luo3_app/components/nav_bar.dart';
 import 'package:luo3_app/models/user_models.dart';
+import 'package:luo3_app/pages/driver/driver_home.dart';
 import 'package:luo3_app/pages/renter/profile/add_new_address_page.dart';
 import 'package:luo3_app/pages/auth/authenticate.dart';
-import 'package:luo3_app/pages/auth/profile_complete_page.dart';
-import 'package:luo3_app/pages/auth/verification_page.dart';
 import 'package:luo3_app/pages/renter/drinking_mode.dart';
 import 'package:luo3_app/pages/renter/filter_page.dart';
-import 'package:luo3_app/pages/homes/vehicle-driver-home.dart';
 import 'package:luo3_app/pages/renter/profile/manage_adress_page.dart';
 import 'package:luo3_app/pages/renter/profile/notification_page.dart';
 import 'package:luo3_app/pages/splash/splash_page_logo.dart';
@@ -41,13 +39,11 @@ class Luo3App extends StatelessWidget {
           '/': (context) => const SplashPageLogo(), // leads to Wrapper
           '/vehicle-owner-home': (context) => const VehicleOwnerHome(),
           '/vehicle-renter-home': (context) => const Luo3NavBar(),
-          '/vehicle-driver-home': (context) => const VehicleDriverHomePage(),
+          '/vehicle-driver-home': (context) => const DriverHomePage(),
           '/rental-agency-home': (context) => const Luo3NavBar(),
           '/repair-shop-owner-home': (context) => const Luo3NavBar(),
           '/default-home': (context) => const Luo3NavBar(),
           '/login': (context) => const Authenticate(),
-          '/profile-complete': (context) => const ProfileCompletePage(),
-          '/verification': (context) => const VerificationPage(),
           '/vehicle-list': (context) => const VehicleListPage(),
           '/add-vehicle': (context) => const AddVehiclePage(),
           '/filter-vehicle': (context) => const FilterPage(),
